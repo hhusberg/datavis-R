@@ -11,7 +11,7 @@
 # You can choose object names quite freely, but it's best to avoid e.g. function names (mean, sd).  
 # Object names should start with a letter, and can contain letters, numbers, _ and .
 # See Environment tab in RStudio!  
-x <- 10
+x <- 10 
 
 # note: you could just as well use 10 -> x
 
@@ -55,7 +55,8 @@ length(new_age)
 age[1]
 age[3]
 age[1:3]
-
+age[-5]
+age[-length(age)]
 
 # You can print elements that fulfill a condition
 # which ages are above 13?
@@ -66,17 +67,17 @@ age[cond]
 # Above, cond is a logical vector, i.e. it consists of TRUE/FALSE values only. 
 
 # There are also character (categorical) vectors.
-firstnames <- c("John", "Mark", "Jane", "Alice", "Sophie")
+firstname <- c("John", "Mark", "Jane", "Alice", "Sophie")
 
 # Print the structure of the vector
-str(firstnames)
+str(firstname)
 
 
 ########### From vectors to data frames
 
 # Multiple vectors can be combined into a data frame. It will also show up in the Environment tab.  
 
-df <- data.frame(age, firstnames)
+df <- data.frame(age, firstname)
 str(df)
 
 # print your data frame
@@ -96,11 +97,13 @@ df$age
 # Make new variable (here, centered age values)  
 df$age_centered <- (df$age - mean(df$age))
 
-# Select variables age and age_centered (two ways)  
-df[,c(1,3)]
+# Select variables age and age_centered
+df[c(1,3)]
 
-df[, c("age", "age_centered")] 
+df[c("age", "age_centered")] 
 
+# Select variables that start with "age"
+df[grepl("^age", names(df))] # this uses a thing called regular expressions
 
 #### Same in tidyverse
 
@@ -112,6 +115,8 @@ df <- mutate(df, age_centered = age - mean(age))
 # Select variables age and age_centered  
 select(df, age, age_centered)
 
+# Select variables that start with "age"
+select(df, starts_with("age"))
 
 ##### Pipe operator
 # Using the pipe operator %>% enhances readability of your code. 
@@ -126,10 +131,10 @@ age %>% mean # instead of mean(age)
 # The benefits of the pipe operator become more obvious when we need to carry out many operations in sequence.  
 # The code below:  
 # 1. takes the data frame
-# 2. creates a new variable with *mutate()*  
-# 3. filters rows of the data frame with *filter()*  
-# 4. groups the data frame by gender with *group_by()*  
-# 5. computes mean age by gender with *summarise()*  
+# 2. creates a new variable with mutate()  
+# 3. filters rows of the data frame with filter()  
+# 4. groups the data frame by gender with group_by()  
+# 5. computes mean age by gender with summarise()  
 # (it's common to use line breaks after each pipe)  
 
 df %>% 

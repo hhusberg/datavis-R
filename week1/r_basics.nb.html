@@ -1769,6 +1769,9 @@ A chunk in an .Rmd file can be run with the arrow on top of the chunk.</p>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuNSs1XG5gYGAifQ== -->
 <pre class="r"><code>5+5</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwXG4ifQ== -->
+<pre><code>[1] 10</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Assign value (10) to object (x) with the arrow.<br />
@@ -1787,11 +1790,18 @@ Object names should start with a letter, and can contain letters, numbers, _ and
 <p>Print the object by just typing its name</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueFxuXG54ICsgNVxuYGBgIn0= -->
-<pre class="r"><code>x
-
-x + 5</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueFxuYGBgIn0= -->
+<pre class="r"><code>x</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwXG4ifQ== -->
+<pre><code>[1] 10</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueCArIDVcbmBgYCJ9 -->
+<pre class="r"><code>x + 5</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE1XG4ifQ== -->
+<pre><code>[1] 15</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1816,6 +1826,9 @@ Let’s create a vector named “age”, with 5 elements:</p>
 
 age</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzIDE1IDEyIDEzIDE2XG4ifQ== -->
+<pre><code>[1] 13 15 12 13 16</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1823,15 +1836,27 @@ age</code></pre>
 <p>Some basic functions:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGFnZSlcbm1lYW4oYWdlKVxuYGBgIn0= -->
-<pre class="r"><code>length(age)
-mean(age)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGFnZSlcbmBgYCJ9 -->
+<pre class="r"><code>length(age)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDVcbiJ9 -->
+<pre><code>[1] 5</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihhZ2UpXG5gYGAifQ== -->
+<pre class="r"><code>mean(age)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzLjhcbiJ9 -->
+<pre><code>[1] 13.8</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShhZ2UpIFxuYGBgIn0= -->
 <pre class="r"><code>summary(age) </code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gICAxMi4wICAgIDEzLjAgICAgMTMuMCAgICAxMy44ICAgIDE1LjAgICAgMTYuMCBcbiJ9 -->
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   12.0    13.0    13.0    13.8    15.0    16.0 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1839,6 +1864,9 @@ mean(age)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKGFnZSkgIyBzaG93cyBzdHJ1Y3R1cmUgb2YgdGhlIHZlY3RvcjogdHlwZSwgbGVuZ3RoLCBmaXJzdCB2YWx1ZXNcbmBgYCJ9 -->
 <pre class="r"><code>str(age) # shows structure of the vector: type, length, first values</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIG51bSBbMTo1XSAxMyAxNSAxMiAxMyAxNlxuIn0= -->
+<pre><code> num [1:5] 13 15 12 13 16</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1857,6 +1885,9 @@ mean(age)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFzdGUoXCJNZWFuIGFnZTpcIiwgbWVhbl9hZ2UpXG5gYGAifQ== -->
 <pre class="r"><code>paste(&quot;Mean age:&quot;, mean_age)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTWVhbiBhZ2U6IDEzLjhcIlxuIn0= -->
+<pre><code>[1] &quot;Mean age: 13.8&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1867,6 +1898,9 @@ mean(age)</code></pre>
 <pre class="r"><code>new_age &lt;- c(age, x)
 length(new_age)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDZcbiJ9 -->
+<pre><code>[1] 6</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="accessing-the-elements-of-a-vector" class="section level4">
@@ -1874,24 +1908,44 @@ length(new_age)</code></pre>
 <p>You can access individual elements of a vector with indices</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlWzFdXG5hZ2VbM11cbmFnZVsxOjNdXG5gYGAifQ== -->
-<pre class="r"><code>age[1]
-age[3]
-age[1:3]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlWzFdXG5gYGAifQ== -->
+<pre class="r"><code>age[1]</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzXG4ifQ== -->
+<pre><code>[1] 13</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlWzNdXG5gYGAifQ== -->
+<pre class="r"><code>age[3]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEyXG4ifQ== -->
+<pre><code>[1] 12</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlWzE6M11cbmBgYCJ9 -->
+<pre class="r"><code>age[1:3]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzIDE1IDEyXG4ifQ== -->
+<pre><code>[1] 13 15 12</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
 <p>You can print elements that fulfill a condition.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3aGljaCBhZ2VzIGFyZSBhYm92ZSAxMz9cbmFnZSA+IDEzXG5jb25kIDwtIChhZ2UgPiAxMylcbmFnZVtjb25kXVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3aGljaCBhZ2VzIGFyZSBhYm92ZSAxMz9cbmFnZSA+IDEzXG5gYGAifQ== -->
 <pre class="r"><code># which ages are above 13?
-age &gt; 13
-cond &lt;- (age &gt; 13)
-age[cond]
-</code></pre>
+age &gt; 13</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIEZBTFNFICBUUlVFIEZBTFNFIEZBTFNFICBUUlVFXG4ifQ== -->
+<pre><code>[1] FALSE  TRUE FALSE FALSE  TRUE</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZCA8LSAoYWdlID4gMTMpXG5hZ2VbY29uZF1cbmBgYCJ9 -->
+<pre class="r"><code>cond &lt;- (age &gt; 13)
+age[cond]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE1IDE2XG4ifQ== -->
+<pre><code>[1] 15 16</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Above, cond is a <strong>logical vector</strong>, i.e. it consists of TRUE/FALSE values only. These can be used to get subsets of other vectors.</p>
@@ -1899,8 +1953,8 @@ age[cond]
 <p>There are also <strong>character (categorical) vectors</strong>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlyc3RuYW1lcyA8LSBjKFwiSm9oblwiLCBcIk1hcmtcIiwgXCJKYW5lXCIsIFwiQWxpY2VcIiwgXCJTb3BoaWVcIilcbmBgYCJ9 -->
-<pre class="r"><code>firstnames &lt;- c(&quot;John&quot;, &quot;Mark&quot;, &quot;Jane&quot;, &quot;Alice&quot;, &quot;Sophie&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlyc3RuYW1lIDwtIGMoXCJKb2huXCIsIFwiTWFya1wiLCBcIkphbmVcIiwgXCJBbGljZVwiLCBcIlNvcGhpZVwiKVxuYGBgIn0= -->
+<pre class="r"><code>firstname &lt;- c(&quot;John&quot;, &quot;Mark&quot;, &quot;Jane&quot;, &quot;Alice&quot;, &quot;Sophie&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1908,10 +1962,12 @@ age[cond]
 <p>Print the structure of the vector</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKGZpcnN0bmFtZXMpXG5cbmBgYCJ9 -->
-<pre class="r"><code>str(firstnames)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKGZpcnN0bmFtZSlcbmBgYCJ9 -->
+<pre class="r"><code>str(firstname)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIGNociBbMTo1XSBcIkpvaG5cIiBcIk1hcmtcIiBcIkphbmVcIiBcIkFsaWNlXCIgXCJTb3BoaWVcIlxuIn0= -->
+<pre><code> chr [1:5] &quot;John&quot; &quot;Mark&quot; &quot;Jane&quot; &quot;Alice&quot; &quot;Sophie&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1921,8 +1977,8 @@ age[cond]
 <p>Multiple vectors can be combined into a <strong>data frame</strong>. It will also show up in the Environment tab.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gZGF0YS5mcmFtZShhZ2UsIGZpcnN0bmFtZXMpXG5cbmBgYCJ9 -->
-<pre class="r"><code>df &lt;- data.frame(age, firstnames)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgPC0gZGF0YS5mcmFtZShhZ2UsIGZpcnN0bmFtZSlcblxuYGBgIn0= -->
+<pre class="r"><code>df &lt;- data.frame(age, firstname)
 </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -1932,6 +1988,11 @@ age[cond]
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKGRmKVxuYGBgIn0= -->
 <pre class="r"><code>str(df)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJ2RhdGEuZnJhbWUnOlx0NSBvYnMuIG9mICAyIHZhcmlhYmxlczpcbiAkIGFnZSAgICAgIDogbnVtICAxMyAxNSAxMiAxMyAxNlxuICQgZmlyc3RuYW1lOiBjaHIgIFwiSm9oblwiIFwiTWFya1wiIFwiSmFuZVwiIFwiQWxpY2VcIiAuLi5cbiJ9 -->
+<pre><code>&#39;data.frame&#39;:   5 obs. of  2 variables:
+ $ age      : num  13 15 12 13 16
+ $ firstname: chr  &quot;John&quot; &quot;Mark&quot; &quot;Jane&quot; &quot;Alice&quot; ...</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1941,6 +2002,13 @@ age[cond]
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZcbmBgYCJ9 -->
 <pre class="r"><code>df</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFUVXNETVJDZFpqY3J1OUJTNko4UW9hR3RDQjRyZWhJRTBVdXY2VGJ0aHE3SmtrM1JvNys4bW1RemZtUWd6SnVYZWZQMThyQzVyallWQUdTUUE0R01PZ2pGL2ZOeWRiTUN5SW1MUnU2bjlQN0RaYzBjOE9URVBicStnbUJyRnYxbDlNZ3ZBRzNxODJPaC9GRTNDdkVUTjhjZm5pc1JNYjFyWlkxQjhhcTdSb3BrSHFyNG0raGpiUkxKakI5UVZlNmw2YTFQU29TbDBlOE14V012L2h5R3BHbUh1dVU5ZGtDeTJuSEwyZDZFdW5CT0pCZTZzMUlySnlLem9lSS84Y2dreFBTay9DUzdlZDJjMUhHK3ZQVWR3djlnNDRqcEgweUdudVFydVdzaDFFSCtYckRsVzlIR1lPSldEaHV6emtobGNSWEg5c3hxeXpHdnFuV0xURmdPenQ4SWFIcEpJd0lBQUE9PSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["firstname"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"13","2":"John"},{"1":"15","2":"Mark"},{"1":"12","2":"Jane"},{"1":"13","2":"Alice"},{"1":"16","2":"Sophie"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1955,6 +2023,9 @@ age[cond]
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYkYWdlXG5gYGAifQ== -->
 <pre class="r"><code>df$age</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzIDE1IDEyIDEzIDE2XG4ifQ== -->
+<pre><code>[1] 13 15 12 13 16</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -1970,27 +2041,48 @@ age[cond]
 <p>Select variables <em>age</em> and <em>age_centered</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbLGMoMSwzKV1cbmBgYCJ9 -->
-<pre class="r"><code>df[,c(1,3)]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbYygxLDMpXVxuYGBgIn0= -->
+<pre class="r"><code>df[c(1,3)]</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IV3JSclNxMUVzZ3BGcHRLdFpFZ2dNZ1Z0MVZKakVsSXRpVjR3cVdIQU4yM0tRWFlNRTFXTE5GaGZGUEtubFNOTS9QOCtaNWNuTzFXbWFyREFCUzZBR0JsQ0tGL3VYMUlqL1BBWG9FVHduZURHMTl4cTRwRWl1TzhhUEZHVGdVTE5UVFVLTStod2pYdi85NnMzaS8rRjVhelBjL0h4YWZVUzhTVjE4N3dWVHlSOUVpbWJod0w2WjhJd0k5UWJvdWhUUkNpNnJqSFdyMXhLSi9aUDB2L2tHMEcxSTJ2STBoVWN3cWJqaTcwK2pIMDZGakdhaXRxWlZFRTVuNmlmL01pZTRJazUyMEw2bG01ZjFPUHN6eWhVMXc5eDZqd09rUkp6NlQvSVpaTk16cUM3bXBaZndEdE9HM29nbUhNYTdzTm1aYlhVc1RWMEcxWlVZWkh2dXlValZSY2N2QjRRK2l2d3RpRHdJQUFBPT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
 <p>OR:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbLCBjKFwiYWdlXCIsIFwiYWdlX2NlbnRlcmVkXCIpXSBcbmBgYCJ9 -->
-<pre class="r"><code>df[, c(&quot;age&quot;, &quot;age_centered&quot;)] </code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbYyhcImFnZVwiLCBcImFnZV9jZW50ZXJlZFwiKV0gXG5gYGAifQ== -->
+<pre class="r"><code>df[c(&quot;age&quot;, &quot;age_centered&quot;)] </code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IVlJJMXBWNmlVUVVxMlNpaldSNEFDSVZYZklKS1pFQkx0eVhNR1NZOENPbS9RQ0xMZ0dhN2FvTVA1SjRDZEY4L3c4YjU0blZ4ZXJaYkVxQUNDSEFSRElLVklZbmwrZWxLY2x3SURnS2NPYmthMVAyRFZEWXNVSmZyUTZCb2VLaFhvVWF0UVhFT0g2ZDUrdkZtOW5YMHVMeGU3NzNlSWo2bFhtNmtzU1RDVi9FRDJTcVF2M1lzN1hJdEJEcE5lMWtFWm8wU1Rla1ZhUExQckgxdi9zSDBUVGtMcmpmUXlKWXRGd3c5bXRSaitlOW9ubFFHMU1xeVNheU14UC9HZk9kQ0pNdDlLK3BKblhkMXQ1UHk5TG0rRHVQY2FCMHorYytFenlFMmJSTUdzbzVMcVY4US9RanQrSUxod211TExibUcxMEswMWNCZFdlR1dWNDdDdHExVVhGTFFmN1g4VFo2Y2NQQWdBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
 <p>Select variables that start with “age”:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbZ3JlcGwobmFtZXMoZGYpLCBcIl5hZ2VcIildICMgdGhpcyB1c2VzIGEgdGhpbmcgY2FsbGVkIHJlZ3VsYXIgZXhwcmVzc2lvbnNcbmBgYCJ9 -->
-<pre class="r"><code>df[grepl(names(df), &quot;^age&quot;)] # this uses a thing called regular expressions</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGZbZ3JlcGwoXCJeYWdlXCIsIG5hbWVzKGRmKSldICAjIHRoaXMgdXNlcyBhIHRoaW5nIGNhbGxlZCByZWd1bGFyIGV4cHJlc3Npb25zXG5gYGAifQ== -->
+<pre class="r"><code>df[grepl(&quot;^age&quot;, names(df))]  # this uses a thing called regular expressions</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IVlJJMXBWNmlVUVVxMlNpRFdSNkFFUXErNlFTVXlKQ0hibHVJSWx4NEFkTitrRnV1QWFyTm1pd3ZnblFaNFV6ZlB6dkhtZVhDOVhSYmJLQUNDRkFSQklLVklZWGw2ZDVlYzV3SURnS2NHYmthM1AyRFZEWXNVSmZyUThCWWVTaFhvU2F0UVhFT0g2ZDU5dkZ1OFhYNFhGWXZlOXQvaUllcG00K3RvTHBwSS9pZzdKMUlWN01lVnJFZWd4MHB0S1NDTzBxSHZla1ZaUExQckgxdi9pSDBUN0lWWEx1eGdTeGF6bWhyTTdqWDQ4SFhxV0k3VXhqWkpvSWpNLzhaODUwVDFodXBYMkpmVzh1dC9LaDNsZTJBUjM3ekVPblA3aHhHZVNuekNMaGxsRElkZU5qSCtBdHZ4V3RPRXd3WlhkeG15akcybmlLcWgyekNqRFkxOVdxVFlxYmprNC9BTG0rN2VrRHdJQUFBPT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -2019,6 +2111,13 @@ age[cond]
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2VsZWN0KGRmLCBhZ2UsIGFnZV9jZW50ZXJlZClcbmBgYCJ9 -->
 <pre class="r"><code>select(df, age, age_centered)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IV3JSclNxMUVzZ3BGb2xGV3lKQkFkQXJMcERKakVsSXRpVjR3cVdIQU4yM0tRWFlNRTFXTE90Q3VPZlZQS2thSjZmNTgzejVPWnF1Y2lXR1FDazBBTUNLVVVLL2N2cjAvd3NCK2dSUENWNE03VDFCYnVtU0t3NHhvOFdKK0JRc0ZDUFE0MzZIQ0pjLy9iNzNlTGo0bWRoTWQvdVBpMitvbDRrcnI1MWdxbmtUNkpGTW5IaFhrejVTZ1I2aFBTMkZOSUlMYXFPZDZqVk00ditrZlcvK2dmUmJralo4RGFHUkRHcnVPSHNYcU1mVC91T1phRFdwbFlTVFdUcUovNHpKN29qVERiU3ZxU2FsUThiK1RqTHoyMkN1L2NZQlU0UE9QR1o1RGZNb21GV1g4aFZMZU1mb0EyL0UwMDRqSEZsdHpGYjYxcWF1QXFxTFRQSzhOaVhsYXFKaWxzTzluOE5WK0NSRHdJQUFBPT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /> Select variables that start with “age”:</p>
@@ -2027,6 +2126,13 @@ age[cond]
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2VsZWN0KGRmLCBzdGFydHNfd2l0aChcImFnZVwiKSlcbmBgYCJ9 -->
 <pre class="r"><code>select(df, starts_with(&quot;age&quot;))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IV3JSclNxMUVzZ3BGb2xGV0pKSkRnQVl0VWRNb2twRWNHdUhGZXc1Qml3NHlhOUFBdXV3WnB0VlJqL3BKSW5SZlA4UEcrZUp6ZFh5MFcyekFBZ2hSNFFTQ2xTNkY5ZW4rWm5PVUNQNENuQm02R3RMOWcxUldMRk1YNjBPQUdIZ29WNkhHclU1eERoK3JmZjd4WWZGejhMaS9sMjkybnhGZlVpY2ZXdEUwd2xmeEl0a29rTDkyTEtWeUxRSTZTM3BaQkdhRkYxdkVPdG5sbjBqNnovMVQrSWRrUEtocmN4SklwWnhRMW45eHI5ZU5wM0xBTzFOcldTYUNKVFAvR2ZPZEVkWWJLUjlpWFZySHpZeU1kWmZtNFQzTDNIS0hCNndJblBKTDloRmcyeitrS3VhaG4vQUczNG5XakNZWXdydTQzWld0ZlN4RlZRYlpsUmhzZStyRlJOVk54eXNQOERMM1crOGc4Q0FBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="pipe-operator" class="section level5">
@@ -2035,9 +2141,18 @@ age[cond]
 For example, variables would be selected like this:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgJT4lIHNlbGVjdChhZ2UsIGFnZV9jZW50ZXJlZClcblxuYGBgIn0= -->
-<pre class="r"><code>df %&gt;% select(age, age_centered)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgJT4lIHNlbGVjdChhZ2UsIGFnZV9jZW50ZXJlZClcbmBgYCJ9 -->
+<pre class="r"><code>df %&gt;% select(age, age_centered)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6NSwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFTMDdETUJDZE9IV3JSclNxMUVzZ3BGb2xGUkk3SXNFQkVLdnVrRWxNaVFoMjViaUNKY2VBSFRmcEJWaHdEZFpzcThMNEo1VThLWnJuNTNuelBMbTVXaTZ5WlFZQUtmU0FRRXFSUXYveStqUS95d0Y2QkU4SjNneHRmY0d1S1JJcmp2R2p4UWs0RkN6VTQxQ2pQb2NJMTcvOWZyZjR1UGhaV015M3UwK0xyNmdYaWF0dm5XQXErWk5va1V4Y3VCZFR2aEtCSGlHOUxZVTBRb3VxNHgxcTljeWlmMlQ5ci81QnRCdFNOcnlOSVZITUttNDR1OWZveDlPK1l4bW90YW1WUkJPWitvbi96SW51Q0pPTnRDK3BadVhEUmo3TzhuT2I0TzQ5Um9IVEEwNThKdmtOczJpWTFSZHlWY3Y0QjJqRDcwUVREbU5jMlczTTFycVdKcTZDYXN1TU1qejJaYVZxb3VLV2cvMGZFb0JHclE4Q0FBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_centered"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"-0.8"},{"1":"15","2":"1.2"},{"1":"12","2":"-1.8"},{"1":"13","2":"-0.8"},{"1":"16","2":"2.2"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[5]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
+<pre class="r"><code>NA</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2048,6 +2163,9 @@ For example, variables would be selected like this:</p>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlICU+JSBtZWFuICMgaW5zdGVhZCBvZiBtZWFuKGFnZSlcbmBgYCJ9 -->
 <pre class="r"><code>age %&gt;% mean # instead of mean(age)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEzLjhcbiJ9 -->
+<pre><code>[1] 13.8</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><br /><br /></p>
@@ -2065,14 +2183,23 @@ For example, variables would be selected like this:</p>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgJT4lIFxuICBtdXRhdGUoZ2VuZGVyID0gYygnTWFsZScsICdNYWxlJywgJ0ZlbWFsZScsICdGZW1hbGUnLCAnRmVtYWxlJykpICU+JSBcbiAgZmlsdGVyKGFnZSA+PSAxMykgJT4lICMgZmlsdGVyIGFnZXMgZ3JlYXRlciB0aGFuIG9yIGVxdWFsIHRvIDEzXG4gIGdyb3VwX2J5KGdlbmRlcikgJT4lICMgZ3JvdXAgYnkgZ2VuZGVyXG4gIHN1bW1hcmlzZShhZ2UgPSBtZWFuKGFnZSkpICMgZmluZCBtZWFuIGFnZSBieSBnZW5kZXJcblxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGYgJT4lIFxuICBtdXRhdGUoZ2VuZGVyID0gYygnTWFsZScsICdNYWxlJywgJ0ZlbWFsZScsICdGZW1hbGUnLCAnRmVtYWxlJykpICU+JSBcbiAgZmlsdGVyKGFnZSA+PSAxMykgJT4lICMgZmlsdGVyIGFnZXMgZ3JlYXRlciB0aGFuIG9yIGVxdWFsIHRvIDEzXG4gIGdyb3VwX2J5KGdlbmRlcikgJT4lICMgZ3JvdXAgYnkgZ2VuZGVyXG4gIHN1bW1hcmlzZShhZ2UgPSBtZWFuKGFnZSkpICMgZmluZCBtZWFuIGFnZSBieSBnZW5kZXJcbmBgYCJ9 -->
 <pre class="r"><code>df %&gt;% 
   mutate(gender = c(&#39;Male&#39;, &#39;Male&#39;, &#39;Female&#39;, &#39;Female&#39;, &#39;Female&#39;)) %&gt;% 
   filter(age &gt;= 13) %&gt;% # filter ages greater than or equal to 13
   group_by(gender) %&gt;% # group by gender
-  summarise(age = mean(age)) # find mean age by gender
-</code></pre>
+  summarise(age = mean(age)) # find mean age by gender</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiYHN1bW1hcmlzZSgpYCB1bmdyb3VwaW5nIG91dHB1dCAob3ZlcnJpZGUgd2l0aCBgLmdyb3Vwc2AgYXJndW1lbnQpXG4ifQ== -->
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibnJvdyI6MiwibmNvbCI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVFRVzdDTUJCY25KaUtTQ0NrZnFPSldsRHZTRVc5VlVLY2NuVVRONDFxYk9RWWxXTmZUcnJyMkFlOEIzdDJkbWVjeVhGZmI0dTZBSUFNY21DUWNZUXdmenU4YkY0M0FEbkRib2FUQmQxWDNIcEVRT1RhMzlOZy9pNVBRc25RNVIrRUFWYTBzU3ZCMSs0SlF0MVpjaTFPY2tqdE9xbGJhVU9YaVU0bXFvVTF2MVZVTGtuNWg4YzRqcmZVdmxGaWlQYVJMRnJoUlBWbFVZOWRLbmt3WjljYmpTSkdVWGtpbnRtRVdGODBmVWxiTnQ4WC9WTnVuK2tGUDU5cUdUQzd4L1FtRzRNWGo4R2w3bm9kL3lOWDRsT3EwS3d3c2s5Y25XMnZYWXlDN0ZBNTQwVGNLeHFqSXVQRHdlMGZmVDRXTCtNQkFBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["gender"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Female","2":"14.5"},{"1":"Male","2":"14.0"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[2]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>It’s quite easy to understand what is going on by just reading the code (but don’t worry if it isn’t just yet!), because you can guess what a tidyverse function does based on its name, and the pipe operator helps you to perceive the order of the steps.</p>
@@ -2088,13 +2215,16 @@ For example, variables would be selected like this:</p>
 <pre class="r"><code>plot(df$age, df$age_centered)
 </code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-plot-begin eyJoZWlnaHQiOjQzMi42MzI5LCJ3aWR0aCI6NzAwLCJzaXplX2JlaGF2aW9yIjowLCJjb25kaXRpb25zIjpbXX0= -->
+<p><img src="data:image/png;base64,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" /></p>
+<!-- rnb-plot-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsgMTogUiBCYXNpY3MiDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOg0KICAgIHRvYzogeWVzDQotLS0NCg0KIyMgUnVubmluZyBjb2RlLCBhc3NpZ25pbmcgdmFsdWVzIHRvIG9iamVjdHMNCg0KWW91IGNhbiBnZXQgb3V0cHV0IGJ5IHNpbXBseSB0eXBpbmcgaW50byB0aGUgY29uc29sZSwgb3IgcnVubmluZyAocGFydCBvZikgYSBzY3JpcHQgZmlsZS4gT3V0cHV0IGlzIHNob3duIGluIHRoZSBjb25zb2xlICguUiBmaWxlcyksIG9yIGluIHRoZSBlZGl0b3IgKC5SbWQgZmlsZXMsIHN1Y2ggYXMgdGhpcykuICAgDQpZb3UgY2FuIHJ1biBhIGxpbmUgb2YgY29kZSB3aXRoIHRoZSB0b3AgcmlnaHQgYnV0dG9uLCBvciBDdHJsK0VudGVyIChzZWUgVG9vbHMgLT4gS2V5Ym9hcmQgU2hvcnRjdXRzIEhlbHApLiAgDQpBIGNodW5rIGluIGFuIC5SbWQgZmlsZSBjYW4gYmUgcnVuIHdpdGggdGhlIGFycm93IG9uIHRvcCBvZiB0aGUgY2h1bmsuICANCg0KYGBge3J9DQo1KzUNCmBgYA0KDQoNCkFzc2lnbiB2YWx1ZSAoMTApIHRvIG9iamVjdCAoeCkgd2l0aCB0aGUgYXJyb3cuICANCllvdSBjYW4gY2hvb3NlIG9iamVjdCBuYW1lcyBxdWl0ZSBmcmVlbHksIGJ1dCBpdCdzIGJlc3QgdG8gYXZvaWQgZS5nLiBmdW5jdGlvbiBuYW1lcyAobWVhbiwgc2QpLiAgDQpPYmplY3QgbmFtZXMgc2hvdWxkIHN0YXJ0IHdpdGggYSBsZXR0ZXIsIGFuZCBjYW4gY29udGFpbiBsZXR0ZXJzLCBudW1iZXJzLCBfIGFuZCAuDQpTZWUgRW52aXJvbm1lbnQgdGFiIGluIFJTdHVkaW8hICANCg0KYGBge3J9DQp4IDwtIDEwDQoNCiMgbm90ZTogeW91IGNvdWxkIGp1c3QgYXMgd2VsbCB1c2UgMTAgLT4geA0KYGBgDQoNCjxici8+PGJyLz4NCg0KUHJpbnQgdGhlIG9iamVjdCBieSBqdXN0IHR5cGluZyBpdHMgbmFtZSAgDQoNCmBgYHtyfQ0KeA0KDQp4ICsgNQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KQ3JlYXRlIGEgbmV3IG9iamVjdCBiYXNlZCBvbiB4ICANCg0KYGBge3J9DQp5IDwtIDIqeA0KDQpgYGANCg0KDQojIyBWZWN0b3JzIGFuZCBmdW5jdGlvbnMNCg0KVGhlIGJhc2ljIGRhdGEgdHlwZSBvZiBSIGlzIGEgKip2ZWN0b3IqKiwgY3JlYXRlZCB3aXRoICpjKCkqLiAgDQpMZXQncyBjcmVhdGUgYSB2ZWN0b3IgbmFtZWQgImFnZSIsIHdpdGggNSBlbGVtZW50czogIA0KYGBge3J9DQphZ2UgPC0gYygxMywgMTUsIDEyLCAxMywgMTYpDQoNCmFnZQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KKipGdW5jdGlvbnMqKiBpbiBSIGFyZSBvZiB0aGUgZm9ybSAqZnVuY3Rpb25fbmFtZShhcmd1bWVudCkqICANCg0KU29tZSBiYXNpYyBmdW5jdGlvbnM6ICANCmBgYHtyfQ0KbGVuZ3RoKGFnZSkNCm1lYW4oYWdlKQ0KYGBgDQpgYGB7cn0NCnN1bW1hcnkoYWdlKSANCmBgYA0KDQpgYGB7cn0NCnN0cihhZ2UpICMgc2hvd3Mgc3RydWN0dXJlIG9mIHRoZSB2ZWN0b3I6IHR5cGUsIGxlbmd0aCwgZmlyc3QgdmFsdWVzDQpgYGANCjxici8+PGJyLz4NCg0KT3V0cHV0IGZyb20gZnVuY3Rpb25zIGNhbiBhbHNvIGJlIHNhdmVkIHRvIG9iamVjdHMgIA0KDQpgYGB7cn0NCm1lYW5fYWdlIDwtIG1lYW4oYWdlKQ0KYGBgDQo8YnIvPjxici8+DQoNCkFuIG9iamVjdCBjYW4gYmUgcHJpbnRlZCB3aXRoIHRleHQgdXNpbmcgdGhlICpwYXN0ZSgpKiBmdW5jdGlvbg0KYGBge3J9DQpwYXN0ZSgiTWVhbiBhZ2U6IiwgbWVhbl9hZ2UpDQpgYGANCjxici8+PGJyLz4NCg0KQ29uY2F0ZW5hdGUgdmVjdG9ycyB3aXRoICpjKCkqOiBoZXJlLCB3ZSBjb21iaW5lIG9uZSBuZXcgZWxlbWVudCAoeCkgd2l0aCB0aGUgYWdlIHZlY3Rvcg0KYGBge3J9DQpuZXdfYWdlIDwtIGMoYWdlLCB4KQ0KbGVuZ3RoKG5ld19hZ2UpDQpgYGANCg0KDQojIyMjIEFjY2Vzc2luZyB0aGUgZWxlbWVudHMgb2YgYSB2ZWN0b3INCg0KWW91IGNhbiBhY2Nlc3MgaW5kaXZpZHVhbCBlbGVtZW50cyBvZiBhIHZlY3RvciB3aXRoIGluZGljZXMgIA0KYGBge3J9DQphZ2VbMV0NCmFnZVszXQ0KYWdlWzE6M10NCmBgYA0KPGJyLz48YnIvPg0KDQpZb3UgY2FuIHByaW50IGVsZW1lbnRzIHRoYXQgZnVsZmlsbCBhIGNvbmRpdGlvbi4NCg0KYGBge3J9DQojIHdoaWNoIGFnZXMgYXJlIGFib3ZlIDEzPw0KYWdlID4gMTMNCmNvbmQgPC0gKGFnZSA+IDEzKQ0KYWdlW2NvbmRdDQoNCmBgYA0KDQpBYm92ZSwgY29uZCBpcyBhICoqbG9naWNhbCB2ZWN0b3IqKiwgaS5lLiBpdCBjb25zaXN0cyBvZiBUUlVFL0ZBTFNFIHZhbHVlcyBvbmx5LiBUaGVzZSBjYW4gYmUgdXNlZCB0byBnZXQgc3Vic2V0cyBvZiBvdGhlciB2ZWN0b3JzLiAgDQoNCjxici8+PGJyLz4NCg0KVGhlcmUgYXJlIGFsc28gKipjaGFyYWN0ZXIgKGNhdGVnb3JpY2FsKSB2ZWN0b3JzKiouDQpgYGB7cn0NCmZpcnN0bmFtZXMgPC0gYygiSm9obiIsICJNYXJrIiwgIkphbmUiLCAiQWxpY2UiLCAiU29waGllIikNCmBgYA0KDQo8YnIvPjxici8+DQoNClByaW50IHRoZSBzdHJ1Y3R1cmUgb2YgdGhlIHZlY3Rvcg0KYGBge3J9DQpzdHIoZmlyc3RuYW1lcykNCg0KYGBgDQoNCiMjIEZyb20gdmVjdG9ycyB0byBkYXRhIGZyYW1lcw0KDQpNdWx0aXBsZSB2ZWN0b3JzIGNhbiBiZSBjb21iaW5lZCBpbnRvIGEgKipkYXRhIGZyYW1lKiouIEl0IHdpbGwgYWxzbyBzaG93IHVwIGluIHRoZSBFbnZpcm9ubWVudCB0YWIuICANCmBgYHtyfQ0KZGYgPC0gZGF0YS5mcmFtZShhZ2UsIGZpcnN0bmFtZXMpDQoNCmBgYA0KDQpgYGB7cn0NCnN0cihkZikNCmBgYA0KPGJyLz48YnIvPg0KDQpJbiBSbWQsIGRhdGEgZnJhbWVzIHdpbGwgYmUgcHJpbnRlZCBuZWF0bHkgYXMgdGFibGVzLCBhbHNvIHNob3dpbmcgdmFyaWFibGUgdHlwZXMuICAgDQpgYGB7cn0NCmRmDQpgYGANCiMjIERhdGEgd3JhbmdsaW5nOiBiYXNlIFIgdnMgdGlkeXZlcnNlDQpUaWR5dmVyc2UgaXMgYW4gYWx0ZXJuYXRpdmUgbGlicmFyeSB0byBiYXNlIFIgKHRoZSB0cmFkaXRpb25hbCBzdHlsZSBvZiBSIGNvZGUpLCBhaW1pbmcgZm9yIG1vcmUgcmVhZGFibGUgYW5kIHVuZGVyc3RhbmRhYmxlIGNvZGUuIEV2ZW4gaWYgYmFzZSBSIHNvbHV0aW9ucyBtYXkgc29tZXRpbWVzIGJlIHNob3J0ZXIsIHRoZXkgYXJlIHVzdWFsbHkgdWdsaWVyIGFuZC9vciBsZXNzIGNsZWFyLiBCZWxvdyBhcmUgc29tZSBleGFtcGxlcyB3aXRoIGJvdGggc3R5bGVzLiBJdCdzIGdvb2QgdG8gaGF2ZSBhbiBpZGVhIG9mIHRoZSBsb2dpYyBvZiBiYXNlIFI7IGhvd2V2ZXIsIHRoaXMgY291cnNlIHdpbGwgZm9jdXMgb24gdXNpbmcgdGlkeXZlcnNlIGZ1bmN0aW9ucyBmb3IgZGF0YSB3cmFuZ2xpbmcuICANCg0KDQojIyMjIEJhc2UgUg0KUHJpbnQgdmFyaWFibGUgb2YgZGF0YSBmcmFtZQ0KYGBge3J9DQpkZiRhZ2UNCmBgYA0KPGJyLz48YnIvPg0KDQpNYWtlIG5ldyB2YXJpYWJsZSAoaGVyZSwgY2VudGVyZWQgYWdlIHZhbHVlcykgIA0KYGBge3J9DQpkZiRhZ2VfY2VudGVyZWQgPC0gKGRmJGFnZSAtIG1lYW4oZGYkYWdlKSkNCmBgYA0KPGJyLz48YnIvPg0KDQpTZWxlY3QgdmFyaWFibGVzICphZ2UqIGFuZCAqYWdlX2NlbnRlcmVkKg0KYGBge3J9DQpkZlssYygxLDMpXQ0KYGBgDQo8YnIvPjxici8+DQoNCk9SOg0KYGBge3J9DQpkZlssIGMoImFnZSIsICJhZ2VfY2VudGVyZWQiKV0gDQpgYGANCjxici8+PGJyLz4NCg0KU2VsZWN0IHZhcmlhYmxlcyB0aGF0IHN0YXJ0IHdpdGggImFnZSI6DQpgYGB7cn0NCmRmW2dyZXBsKG5hbWVzKGRmKSwgIl5hZ2UiKV0gIyB0aGlzIHVzZXMgYSB0aGluZyBjYWxsZWQgcmVndWxhciBleHByZXNzaW9ucw0KYGBgDQoNCg0KIyMjIyBTYW1lIGluIHRpZHl2ZXJzZQ0KYGBge3J9DQpsaWJyYXJ5KHRpZHl2ZXJzZSkgIyBsb2FkIHRpZHl2ZXJzZQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KTWFrZSAqYWdlX2NlbnRlcmVkKiB2YXJpYWJsZSB3aXRoIHRoZSBtdXRhdGUoKSBmdW5jdGlvbiAgDQpgYGB7cn0NCmRmIDwtIG11dGF0ZShkZiwgYWdlX2NlbnRlcmVkID0gYWdlIC0gbWVhbihhZ2UpKQ0KYGBgDQo8YnIvPjxici8+DQoNClNlbGVjdCB2YXJpYWJsZXMgKmFnZSogYW5kICphZ2VfY2VudGVyZWQqICANCmBgYHtyfQ0Kc2VsZWN0KGRmLCBhZ2UsIGFnZV9jZW50ZXJlZCkNCmBgYA0KPGJyLz48YnIvPg0KU2VsZWN0IHZhcmlhYmxlcyB0aGF0IHN0YXJ0IHdpdGggImFnZSI6DQpgYGB7cn0NCnNlbGVjdChkZiwgc3RhcnRzX3dpdGgoImFnZSIpKQ0KYGBgDQoNCg0KIyMjIyMgUGlwZSBvcGVyYXRvcg0KDQpVc2luZyB0aGUgKipwaXBlIG9wZXJhdG9yICU+JSoqIGVuaGFuY2VzIHJlYWRhYmlsaXR5IG9mIHlvdXIgY29kZS4gSXQgZXNzZW50aWFsbHkgbWVhbnMgdGhhdCB3aGF0ZXZlciBjb21lcyAqYmVmb3JlKiB0aGUgcGlwZSBpcyB1c2VkIGFzIHRoZSBmaXJzdCBhcmd1bWVudCBvZiB0aGUgZnVuY3Rpb24gdGhhdCBjb21lcyAqYWZ0ZXIqIHRoZSBwaXBlLiAgDQpGb3IgZXhhbXBsZSwgdmFyaWFibGVzIHdvdWxkIGJlIHNlbGVjdGVkIGxpa2UgdGhpczogIA0KYGBge3J9DQpkZiAlPiUgc2VsZWN0KGFnZSwgYWdlX2NlbnRlcmVkKQ0KDQpgYGANCjxici8+PGJyLz4NCg0KT3IgYW4gZXZlbiBzaW1wbGVyIGV4YW1wbGU6ICANCmBgYHtyfQ0KYWdlICU+JSBtZWFuICMgaW5zdGVhZCBvZiBtZWFuKGFnZSkNCmBgYA0KDQo8YnIvPjxici8+DQoNClRoZSBiZW5lZml0cyBvZiB0aGUgcGlwZSBvcGVyYXRvciBiZWNvbWUgbW9yZSBvYnZpb3VzIHdoZW4gd2UgbmVlZCB0byBjYXJyeSBvdXQgbWFueSBvcGVyYXRpb25zIGluIHNlcXVlbmNlLiAgVGhlIGNvZGUgY2h1bmsgYmVsb3c6ICANCg0KMS4gdGFrZXMgdGhlIGRhdGEgZnJhbWUNCjIuIGNyZWF0ZXMgYSBuZXcgdmFyaWFibGUgd2l0aCAqbXV0YXRlKCkqICANCjMuIGZpbHRlcnMgcm93cyBvZiB0aGUgZGF0YSBmcmFtZSB3aXRoICpmaWx0ZXIoKSogIA0KNC4gZ3JvdXBzIHRoZSBkYXRhIGZyYW1lIGJ5IGdlbmRlciB3aXRoICpncm91cF9ieSgpKiAgDQo1LiBjb21wdXRlcyBtZWFuIGFnZSBieSBnZW5kZXIgd2l0aCAqc3VtbWFyaXNlKCkqICANCihpdCdzIGNvbW1vbiB0byB1c2UgbGluZSBicmVha3MgYWZ0ZXIgZWFjaCBwaXBlKSAgDQpgYGB7cn0NCmRmICU+JSANCiAgbXV0YXRlKGdlbmRlciA9IGMoJ01hbGUnLCAnTWFsZScsICdGZW1hbGUnLCAnRmVtYWxlJywgJ0ZlbWFsZScpKSAlPiUgDQogIGZpbHRlcihhZ2UgPj0gMTMpICU+JSAjIGZpbHRlciBhZ2VzIGdyZWF0ZXIgdGhhbiBvciBlcXVhbCB0byAxMw0KICBncm91cF9ieShnZW5kZXIpICU+JSAjIGdyb3VwIGJ5IGdlbmRlcg0KICBzdW1tYXJpc2UoYWdlID0gbWVhbihhZ2UpKSAjIGZpbmQgbWVhbiBhZ2UgYnkgZ2VuZGVyDQoNCmBgYA0KSXQncyBxdWl0ZSBlYXN5IHRvIHVuZGVyc3RhbmQgd2hhdCBpcyBnb2luZyBvbiBieSBqdXN0IHJlYWRpbmcgdGhlIGNvZGUgKGJ1dCBkb24ndCB3b3JyeSBpZiBpdCBpc24ndCBqdXN0IHlldCEpLCBiZWNhdXNlIHlvdSBjYW4gZ3Vlc3Mgd2hhdCBhIHRpZHl2ZXJzZSBmdW5jdGlvbiBkb2VzIGJhc2VkIG9uIGl0cyBuYW1lLCBhbmQgdGhlIHBpcGUgb3BlcmF0b3IgaGVscHMgeW91IHRvIHBlcmNlaXZlIHRoZSBvcmRlciBvZiB0aGUgc3RlcHMuDQoNCiMjIyBXaGF0IGFib3V0IGZpZ3VyZXM/DQoNCkJhc2UgUiBhbHNvIGhhcyBpdHMgb3duIHBsb3R0aW5nIGZ1bmN0aW9ucywgd2hpY2ggYXJlIGhhbmR5IGZvciBxdWljayBhbmQgc2ltcGxlIHZpc3VhbGl6YXRpb25zLCBidXQgdGhlIGNvZGUgYmVjb21lcyBtZXNzeSBpZiB5b3Ugd2FudCB0byBtYWtlIHlvdXIgcGxvdHMgbG9vayBuaWNlICh3aGljaCB3ZSB3aWxsKS4gVGhhdCBpcyB3aHkgd2Ugd29uJ3QgZ28gZGVlcGVyIGludG8gYmFzZSBSIHBsb3R0aW5nIGR1cmluZyB0aGlzIGNvdXJzZSwgYnV0IHdpbGwgaW5zdGVhZCBmb2N1cyBvbiB0aGUgKipnZ3Bsb3QyKiogbGlicmFyeSAocGFydCBvZiB0aWR5dmVyc2UpLiAgDQoNCkhlcmUncyBhbiB1Z2x5IGJhc2UgUiBwbG90IHRoYXQgeW91IHdpbGwgbGVhcm4gdG8gbWFrZSBuaWNlciB3aXRoIGdncGxvdDI6ICANCmBgYHtyfQ0KcGxvdChkZiRhZ2UsIGRmJGFnZV9jZW50ZXJlZCkNCg0KYGBgDQoNCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIldlZWsgMTogUiBCYXNpY3MiDQpvdXRwdXQ6IA0KICBodG1sX25vdGVib29rOg0KICAgIHRvYzogeWVzDQotLS0NCg0KIyMgUnVubmluZyBjb2RlLCBhc3NpZ25pbmcgdmFsdWVzIHRvIG9iamVjdHMNCg0KWW91IGNhbiBnZXQgb3V0cHV0IGJ5IHNpbXBseSB0eXBpbmcgaW50byB0aGUgY29uc29sZSwgb3IgcnVubmluZyAocGFydCBvZikgYSBzY3JpcHQgZmlsZS4gT3V0cHV0IGlzIHNob3duIGluIHRoZSBjb25zb2xlICguUiBmaWxlcyksIG9yIGluIHRoZSBlZGl0b3IgKC5SbWQgZmlsZXMsIHN1Y2ggYXMgdGhpcykuICAgDQpZb3UgY2FuIHJ1biBhIGxpbmUgb2YgY29kZSB3aXRoIHRoZSB0b3AgcmlnaHQgYnV0dG9uLCBvciBDdHJsK0VudGVyIChzZWUgVG9vbHMgLT4gS2V5Ym9hcmQgU2hvcnRjdXRzIEhlbHApLiAgDQpBIGNodW5rIGluIGFuIC5SbWQgZmlsZSBjYW4gYmUgcnVuIHdpdGggdGhlIGFycm93IG9uIHRvcCBvZiB0aGUgY2h1bmsuICANCg0KYGBge3J9DQo1KzUNCmBgYA0KDQoNCkFzc2lnbiB2YWx1ZSAoMTApIHRvIG9iamVjdCAoeCkgd2l0aCB0aGUgYXJyb3cuICANCllvdSBjYW4gY2hvb3NlIG9iamVjdCBuYW1lcyBxdWl0ZSBmcmVlbHksIGJ1dCBpdCdzIGJlc3QgdG8gYXZvaWQgZS5nLiBmdW5jdGlvbiBuYW1lcyAobWVhbiwgc2QpLiAgDQpPYmplY3QgbmFtZXMgc2hvdWxkIHN0YXJ0IHdpdGggYSBsZXR0ZXIsIGFuZCBjYW4gY29udGFpbiBsZXR0ZXJzLCBudW1iZXJzLCBfIGFuZCAuDQpTZWUgRW52aXJvbm1lbnQgdGFiIGluIFJTdHVkaW8hICANCg0KYGBge3J9DQp4IDwtIDEwDQoNCiMgbm90ZTogeW91IGNvdWxkIGp1c3QgYXMgd2VsbCB1c2UgMTAgLT4geA0KYGBgDQoNCjxici8+PGJyLz4NCg0KUHJpbnQgdGhlIG9iamVjdCBieSBqdXN0IHR5cGluZyBpdHMgbmFtZSAgDQoNCmBgYHtyfQ0KeA0KDQp4ICsgNQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KQ3JlYXRlIGEgbmV3IG9iamVjdCBiYXNlZCBvbiB4ICANCg0KYGBge3J9DQp5IDwtIDIqeA0KDQpgYGANCg0KDQojIyBWZWN0b3JzIGFuZCBmdW5jdGlvbnMNCg0KVGhlIGJhc2ljIGRhdGEgdHlwZSBvZiBSIGlzIGEgKip2ZWN0b3IqKiwgY3JlYXRlZCB3aXRoICpjKCkqLiAgDQpMZXQncyBjcmVhdGUgYSB2ZWN0b3IgbmFtZWQgImFnZSIsIHdpdGggNSBlbGVtZW50czogIA0KYGBge3J9DQphZ2UgPC0gYygxMywgMTUsIDEyLCAxMywgMTYpDQoNCmFnZQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KKipGdW5jdGlvbnMqKiBpbiBSIGFyZSBvZiB0aGUgZm9ybSAqZnVuY3Rpb25fbmFtZShhcmd1bWVudCkqICANCg0KU29tZSBiYXNpYyBmdW5jdGlvbnM6ICANCmBgYHtyfQ0KbGVuZ3RoKGFnZSkNCm1lYW4oYWdlKQ0KYGBgDQpgYGB7cn0NCnN1bW1hcnkoYWdlKSANCmBgYA0KDQpgYGB7cn0NCnN0cihhZ2UpICMgc2hvd3Mgc3RydWN0dXJlIG9mIHRoZSB2ZWN0b3I6IHR5cGUsIGxlbmd0aCwgZmlyc3QgdmFsdWVzDQpgYGANCjxici8+PGJyLz4NCg0KT3V0cHV0IGZyb20gZnVuY3Rpb25zIGNhbiBhbHNvIGJlIHNhdmVkIHRvIG9iamVjdHMgIA0KDQpgYGB7cn0NCm1lYW5fYWdlIDwtIG1lYW4oYWdlKQ0KYGBgDQo8YnIvPjxici8+DQoNCkFuIG9iamVjdCBjYW4gYmUgcHJpbnRlZCB3aXRoIHRleHQgdXNpbmcgdGhlICpwYXN0ZSgpKiBmdW5jdGlvbg0KYGBge3J9DQpwYXN0ZSgiTWVhbiBhZ2U6IiwgbWVhbl9hZ2UpDQpgYGANCjxici8+PGJyLz4NCg0KQ29uY2F0ZW5hdGUgdmVjdG9ycyB3aXRoICpjKCkqOiBoZXJlLCB3ZSBjb21iaW5lIG9uZSBuZXcgZWxlbWVudCAoeCkgd2l0aCB0aGUgYWdlIHZlY3Rvcg0KYGBge3J9DQpuZXdfYWdlIDwtIGMoYWdlLCB4KQ0KbGVuZ3RoKG5ld19hZ2UpDQpgYGANCg0KDQojIyMjIEFjY2Vzc2luZyB0aGUgZWxlbWVudHMgb2YgYSB2ZWN0b3INCg0KWW91IGNhbiBhY2Nlc3MgaW5kaXZpZHVhbCBlbGVtZW50cyBvZiBhIHZlY3RvciB3aXRoIGluZGljZXMgIA0KYGBge3J9DQphZ2VbMV0NCmFnZVszXQ0KYWdlWzE6M10NCmBgYA0KPGJyLz48YnIvPg0KDQpZb3UgY2FuIHByaW50IGVsZW1lbnRzIHRoYXQgZnVsZmlsbCBhIGNvbmRpdGlvbi4NCg0KYGBge3J9DQojIHdoaWNoIGFnZXMgYXJlIGFib3ZlIDEzPw0KYWdlID4gMTMNCmNvbmQgPC0gKGFnZSA+IDEzKQ0KYWdlW2NvbmRdDQoNCmBgYA0KDQpBYm92ZSwgY29uZCBpcyBhICoqbG9naWNhbCB2ZWN0b3IqKiwgaS5lLiBpdCBjb25zaXN0cyBvZiBUUlVFL0ZBTFNFIHZhbHVlcyBvbmx5LiBUaGVzZSBjYW4gYmUgdXNlZCB0byBnZXQgc3Vic2V0cyBvZiBvdGhlciB2ZWN0b3JzLiAgDQoNCjxici8+PGJyLz4NCg0KVGhlcmUgYXJlIGFsc28gKipjaGFyYWN0ZXIgKGNhdGVnb3JpY2FsKSB2ZWN0b3JzKiouDQpgYGB7cn0NCmZpcnN0bmFtZSA8LSBjKCJKb2huIiwgIk1hcmsiLCAiSmFuZSIsICJBbGljZSIsICJTb3BoaWUiKQ0KYGBgDQoNCjxici8+PGJyLz4NCg0KUHJpbnQgdGhlIHN0cnVjdHVyZSBvZiB0aGUgdmVjdG9yDQpgYGB7cn0NCnN0cihmaXJzdG5hbWUpDQoNCmBgYA0KDQojIyBGcm9tIHZlY3RvcnMgdG8gZGF0YSBmcmFtZXMNCg0KTXVsdGlwbGUgdmVjdG9ycyBjYW4gYmUgY29tYmluZWQgaW50byBhICoqZGF0YSBmcmFtZSoqLiBJdCB3aWxsIGFsc28gc2hvdyB1cCBpbiB0aGUgRW52aXJvbm1lbnQgdGFiLiAgDQpgYGB7cn0NCmRmIDwtIGRhdGEuZnJhbWUoYWdlLCBmaXJzdG5hbWUpDQoNCmBgYA0KDQpgYGB7cn0NCnN0cihkZikNCmBgYA0KPGJyLz48YnIvPg0KDQpJbiBSbWQsIGRhdGEgZnJhbWVzIHdpbGwgYmUgcHJpbnRlZCBuZWF0bHkgYXMgdGFibGVzLCBhbHNvIHNob3dpbmcgdmFyaWFibGUgdHlwZXMuICAgDQpgYGB7cn0NCmRmDQpgYGANCiMjIERhdGEgd3JhbmdsaW5nOiBiYXNlIFIgdnMgdGlkeXZlcnNlDQpUaWR5dmVyc2UgaXMgYW4gYWx0ZXJuYXRpdmUgbGlicmFyeSB0byBiYXNlIFIgKHRoZSB0cmFkaXRpb25hbCBzdHlsZSBvZiBSIGNvZGUpLCBhaW1pbmcgZm9yIG1vcmUgcmVhZGFibGUgYW5kIHVuZGVyc3RhbmRhYmxlIGNvZGUuIEV2ZW4gaWYgYmFzZSBSIHNvbHV0aW9ucyBtYXkgc29tZXRpbWVzIGJlIHNob3J0ZXIsIHRoZXkgYXJlIHVzdWFsbHkgdWdsaWVyIGFuZC9vciBsZXNzIGNsZWFyLiBCZWxvdyBhcmUgc29tZSBleGFtcGxlcyB3aXRoIGJvdGggc3R5bGVzLiBJdCdzIGdvb2QgdG8gaGF2ZSBhbiBpZGVhIG9mIHRoZSBsb2dpYyBvZiBiYXNlIFI7IGhvd2V2ZXIsIHRoaXMgY291cnNlIHdpbGwgZm9jdXMgb24gdXNpbmcgdGlkeXZlcnNlIGZ1bmN0aW9ucyBmb3IgZGF0YSB3cmFuZ2xpbmcuICANCg0KDQojIyMjIEJhc2UgUg0KUHJpbnQgdmFyaWFibGUgb2YgZGF0YSBmcmFtZQ0KYGBge3J9DQpkZiRhZ2UNCmBgYA0KPGJyLz48YnIvPg0KDQpNYWtlIG5ldyB2YXJpYWJsZSAoaGVyZSwgY2VudGVyZWQgYWdlIHZhbHVlcykgIA0KYGBge3J9DQpkZiRhZ2VfY2VudGVyZWQgPC0gKGRmJGFnZSAtIG1lYW4oZGYkYWdlKSkNCmBgYA0KPGJyLz48YnIvPg0KDQpTZWxlY3QgdmFyaWFibGVzICphZ2UqIGFuZCAqYWdlX2NlbnRlcmVkKg0KYGBge3J9DQpkZltjKDEsMyldDQpgYGANCjxici8+PGJyLz4NCg0KT1I6DQpgYGB7cn0NCmRmW2MoImFnZSIsICJhZ2VfY2VudGVyZWQiKV0gDQpgYGANCjxici8+PGJyLz4NCg0KU2VsZWN0IHZhcmlhYmxlcyB0aGF0IHN0YXJ0IHdpdGggImFnZSI6DQpgYGB7cn0NCmRmW2dyZXBsKCJeYWdlIiwgbmFtZXMoZGYpKV0gICMgdGhpcyB1c2VzIGEgdGhpbmcgY2FsbGVkIHJlZ3VsYXIgZXhwcmVzc2lvbnMNCmBgYA0KDQoNCiMjIyMgU2FtZSBpbiB0aWR5dmVyc2UNCmBgYHtyfQ0KbGlicmFyeSh0aWR5dmVyc2UpICMgbG9hZCB0aWR5dmVyc2UNCmBgYA0KDQo8YnIvPjxici8+DQoNCk1ha2UgKmFnZV9jZW50ZXJlZCogdmFyaWFibGUgd2l0aCB0aGUgbXV0YXRlKCkgZnVuY3Rpb24gIA0KYGBge3J9DQpkZiA8LSBtdXRhdGUoZGYsIGFnZV9jZW50ZXJlZCA9IGFnZSAtIG1lYW4oYWdlKSkNCmBgYA0KPGJyLz48YnIvPg0KDQpTZWxlY3QgdmFyaWFibGVzICphZ2UqIGFuZCAqYWdlX2NlbnRlcmVkKiAgDQpgYGB7cn0NCnNlbGVjdChkZiwgYWdlLCBhZ2VfY2VudGVyZWQpDQpgYGANCjxici8+PGJyLz4NClNlbGVjdCB2YXJpYWJsZXMgdGhhdCBzdGFydCB3aXRoICJhZ2UiOg0KYGBge3J9DQpzZWxlY3QoZGYsIHN0YXJ0c193aXRoKCJhZ2UiKSkNCmBgYA0KDQoNCiMjIyMjIFBpcGUgb3BlcmF0b3INCg0KVXNpbmcgdGhlICoqcGlwZSBvcGVyYXRvciAlPiUqKiBlbmhhbmNlcyByZWFkYWJpbGl0eSBvZiB5b3VyIGNvZGUuIEl0IGVzc2VudGlhbGx5IG1lYW5zIHRoYXQgd2hhdGV2ZXIgY29tZXMgKmJlZm9yZSogdGhlIHBpcGUgaXMgdXNlZCBhcyB0aGUgZmlyc3QgYXJndW1lbnQgb2YgdGhlIGZ1bmN0aW9uIHRoYXQgY29tZXMgKmFmdGVyKiB0aGUgcGlwZS4gIA0KRm9yIGV4YW1wbGUsIHZhcmlhYmxlcyB3b3VsZCBiZSBzZWxlY3RlZCBsaWtlIHRoaXM6ICANCmBgYHtyfQ0KZGYgJT4lIHNlbGVjdChhZ2UsIGFnZV9jZW50ZXJlZCkNCg0KYGBgDQo8YnIvPjxici8+DQoNCk9yIGFuIGV2ZW4gc2ltcGxlciBleGFtcGxlOiAgDQpgYGB7cn0NCmFnZSAlPiUgbWVhbiAjIGluc3RlYWQgb2YgbWVhbihhZ2UpDQpgYGANCg0KPGJyLz48YnIvPg0KDQpUaGUgYmVuZWZpdHMgb2YgdGhlIHBpcGUgb3BlcmF0b3IgYmVjb21lIG1vcmUgb2J2aW91cyB3aGVuIHdlIG5lZWQgdG8gY2Fycnkgb3V0IG1hbnkgb3BlcmF0aW9ucyBpbiBzZXF1ZW5jZS4gIFRoZSBjb2RlIGNodW5rIGJlbG93OiAgDQoNCjEuIHRha2VzIHRoZSBkYXRhIGZyYW1lDQoyLiBjcmVhdGVzIGEgbmV3IHZhcmlhYmxlIHdpdGggKm11dGF0ZSgpKiAgDQozLiBmaWx0ZXJzIHJvd3Mgb2YgdGhlIGRhdGEgZnJhbWUgd2l0aCAqZmlsdGVyKCkqICANCjQuIGdyb3VwcyB0aGUgZGF0YSBmcmFtZSBieSBnZW5kZXIgd2l0aCAqZ3JvdXBfYnkoKSogIA0KNS4gY29tcHV0ZXMgbWVhbiBhZ2UgYnkgZ2VuZGVyIHdpdGggKnN1bW1hcmlzZSgpKiAgDQooaXQncyBjb21tb24gdG8gdXNlIGxpbmUgYnJlYWtzIGFmdGVyIGVhY2ggcGlwZSkgIA0KYGBge3J9DQpkZiAlPiUgDQogIG11dGF0ZShnZW5kZXIgPSBjKCdNYWxlJywgJ01hbGUnLCAnRmVtYWxlJywgJ0ZlbWFsZScsICdGZW1hbGUnKSkgJT4lIA0KICBmaWx0ZXIoYWdlID49IDEzKSAlPiUgIyBmaWx0ZXIgYWdlcyBncmVhdGVyIHRoYW4gb3IgZXF1YWwgdG8gMTMNCiAgZ3JvdXBfYnkoZ2VuZGVyKSAlPiUgIyBncm91cCBieSBnZW5kZXINCiAgc3VtbWFyaXNlKGFnZSA9IG1lYW4oYWdlKSkgIyBmaW5kIG1lYW4gYWdlIGJ5IGdlbmRlcg0KDQpgYGANCkl0J3MgcXVpdGUgZWFzeSB0byB1bmRlcnN0YW5kIHdoYXQgaXMgZ29pbmcgb24gYnkganVzdCByZWFkaW5nIHRoZSBjb2RlIChidXQgZG9uJ3Qgd29ycnkgaWYgaXQgaXNuJ3QganVzdCB5ZXQhKSwgYmVjYXVzZSB5b3UgY2FuIGd1ZXNzIHdoYXQgYSB0aWR5dmVyc2UgZnVuY3Rpb24gZG9lcyBiYXNlZCBvbiBpdHMgbmFtZSwgYW5kIHRoZSBwaXBlIG9wZXJhdG9yIGhlbHBzIHlvdSB0byBwZXJjZWl2ZSB0aGUgb3JkZXIgb2YgdGhlIHN0ZXBzLg0KDQojIyMgV2hhdCBhYm91dCBmaWd1cmVzPw0KDQpCYXNlIFIgYWxzbyBoYXMgaXRzIG93biBwbG90dGluZyBmdW5jdGlvbnMsIHdoaWNoIGFyZSBoYW5keSBmb3IgcXVpY2sgYW5kIHNpbXBsZSB2aXN1YWxpemF0aW9ucywgYnV0IHRoZSBjb2RlIGJlY29tZXMgbWVzc3kgaWYgeW91IHdhbnQgdG8gbWFrZSB5b3VyIHBsb3RzIGxvb2sgbmljZSAod2hpY2ggd2Ugd2lsbCkuIFRoYXQgaXMgd2h5IHdlIHdvbid0IGdvIGRlZXBlciBpbnRvIGJhc2UgUiBwbG90dGluZyBkdXJpbmcgdGhpcyBjb3Vyc2UsIGJ1dCB3aWxsIGluc3RlYWQgZm9jdXMgb24gdGhlICoqZ2dwbG90MioqIGxpYnJhcnkgKHBhcnQgb2YgdGlkeXZlcnNlKS4gIA0KDQpIZXJlJ3MgYW4gdWdseSBiYXNlIFIgcGxvdCB0aGF0IHlvdSB3aWxsIGxlYXJuIHRvIG1ha2UgbmljZXIgd2l0aCBnZ3Bsb3QyOiAgDQpgYGB7cn0NCnBsb3QoZGYkYWdlLCBkZiRhZ2VfY2VudGVyZWQpDQoNCmBgYA0KDQoNCg==</div>
 
 
 

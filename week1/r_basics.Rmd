@@ -121,14 +121,14 @@ Above, cond is a **logical vector**, i.e. it consists of TRUE/FALSE values only.
 
 There are also **character (categorical) vectors**.
 ```{r}
-firstnames <- c("John", "Mark", "Jane", "Alice", "Sophie")
+firstname <- c("John", "Mark", "Jane", "Alice", "Sophie")
 ```
 
 <br/><br/>
 
 Print the structure of the vector
 ```{r}
-str(firstnames)
+str(firstname)
 
 ```
 
@@ -136,7 +136,7 @@ str(firstnames)
 
 Multiple vectors can be combined into a **data frame**. It will also show up in the Environment tab.  
 ```{r}
-df <- data.frame(age, firstnames)
+df <- data.frame(age, firstname)
 
 ```
 
@@ -168,19 +168,19 @@ df$age_centered <- (df$age - mean(df$age))
 
 Select variables *age* and *age_centered*
 ```{r}
-df[,c(1,3)]
+df[c(1,3)]
 ```
 <br/><br/>
 
 OR:
 ```{r}
-df[, c("age", "age_centered")] 
+df[c("age", "age_centered")] 
 ```
 <br/><br/>
 
 Select variables that start with "age":
 ```{r}
-df[grepl(names(df), "^age")] # this uses a thing called regular expressions
+df[grepl("^age", names(df))]  # this uses a thing called regular expressions
 ```
 
 
