@@ -1,0 +1,123 @@
+---
+title: "Week 2 Exercises"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Exercise 1
+
+#### 1.1
+
+Create a new code chunk where you load the tidyverse package. In the chunk settings, suppress any output messages.  
+
+```{r include=F}
+library(tidyverse)
+```
+
+#### 1.2
+
+The tibble *df* has 60 observations (rows) of variables (columns) group, gender, age, score1 and score2 (continuous scores from two tests). Each row represents one participant.  
+```{r include = F}
+# this chunk generates the data, and you can ignore it
+set.seed(1)
+df  <- tibble(group = sample(c(rep(1:2, each=30))),
+              gender = sample(c(rep(c('M', 'F'), 28), rep(999,4))),
+              score1 = rnorm(60, 18, 2),
+              score2 = as.character(runif(60, 0.7, 1.1)*score1))
+  
+```
+
+```{r}
+df
+```
+
+
+There is something to fix in three of the variables. Explore the data and describe what needs to be corrected.  
+
+**Hint**: You can use e.g. str(), distinct(), and summary() to explore the data.  
+```{r}
+## Henrik: Here I'll take a look at the structure of the data to see if I can spot any oddities:
+str(df)
+```
+Henrik: Looking at the data, we see that the variable score2 seems to be coded as a string, not numerical. So we need to convert score2 to numerical data.
+
+# Exercise 2
+
+#### 2.1
+
+Make the corrections you described above.
+```{r}
+df <- transform(df, score2 = as.numeric(score2))
+str(df)
+```
+Henrik: Now the variable score2 is coded as numerical data and we can use it in our further analyses.
+
+#### 2.2
+
+Count observations by group and gender. Arrange by the number of observations (ascending).
+```{r}
+
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Create a new variable, **score_diff**, that contains the difference between score1 and score2.
+
+```{r}
+
+```
+
+#### 3.2
+
+Compute the means of score1, score2, and score_diff.
+
+**Hint**: Like mutate(), summarise() can take multiple variables in one go.
+
+```{r}
+
+```
+
+#### 3.3
+
+Compute the means of score1, score2, and score_diff **by gender**.
+
+```{r}
+
+```
+
+
+# Exercise 4
+
+#### 4.1
+
+Using ggplot2, create a scatter plot with score1 on the x-axis and score2 on the y-axis. 
+```{r}
+
+```
+
+
+#### 4.2
+
+Continuing with the previous plot, colour the points based on gender. 
+
+Set the output figure width to 10 and height to 6.
+
+
+```{r}
+
+```
+
+
+# Exercise 5
+
+#### 5.1
+
+Add the author (your name) and date into the metadata section. Create a table of contents.  
+
+#### 5.2
+
+Knit your document to HTML by changing `html_notebook` to `html_document` in the metadata, and pressing Knit.   
