@@ -11,5 +11,5 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Links to weekly excercises
 
-Links will be published after the deadline :)
+Links will be published after the deadlines :)
 
