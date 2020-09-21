@@ -49,6 +49,7 @@ str(df)
 head(df, 3)
 
 # Create a new variable to the data frame which has the values of my_vector_2 (remember to save the new variable to the data frame object).
+## Henrik: I take it "working out of the box" doesn´t include installing packages, just loading them?
 
 library(tidyverse)
 df <- mutate(df, my_vector_2)
