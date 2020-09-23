@@ -1,0 +1,103 @@
+---
+title: "Introduction to ggplot2"
+output: html_notebook
+---
+
+This is an introduction to plotting with the **ggplot2** library. We will use the built-in **iris** dataset.
+
+Tidyverse contains ggplot2, so that's all we need here.
+```{r message=F}
+library(tidyverse)
+```
+
+### The iris dataset
+
+*This famous iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.*
+
+```{r}
+iris
+```
+
+```{r}
+summary(iris)
+```
+
+```{r}
+str(iris)
+```
+
+We can see that the dataset consists of four numeric variables and one **factor** (Species).  
+
+```{r}
+levels(iris$Species)
+```
+### ggplot2
+
+Plotting with ggplot2 consists of components (functions) joined by `+`:
+
+- initialise the plot with `ggplot()`: what data do you want to plot?
+  - specify aesthetics with `aes()`: by default, the first two will be x and y variables
+- draw the data points with `geom_point()`  
+- other (optional) components to create axis labels, colour scales, subplots, ...
+
+If the *geom* component is missing, a blank plot is drawn, because you haven't told ggplot what to draw (points, lines, etc).
+
+```{r}
+iris %>%
+  ggplot(aes(Sepal.Length, Sepal.Width)) + # x = Sepal.Length, y = Sepal.Width
+  geom_point()
+
+```
+
+Add a title and a subtitle, and customise axis labels with `labs()`.
+```{r}
+iris %>%
+  ggplot(aes(Sepal.Length, Sepal.Width)) + 
+  labs(title = "Scatter plot of sepal length and sepal width", subtitle = "Iris dataset", 
+       x = "Sepal length (cm)", y = "Sepal width (cm)") +
+  geom_point()
+```
+We can add as many geoms to a plot as we want. A regression line can be added with `geom_smooth()`. Confidence interval is plotted by default, and a message about the regression formula is shown (by default, it uses the x and y variables defined in the aesthetics).
+
+```{r}
+iris %>%
+  ggplot(aes(Sepal.Length, Sepal.Width)) + 
+  geom_point() + 
+  labs(title = "Scatter plot of sepal length and sepal width", subtitle = "Iris dataset", 
+       x = "Sepal length (cm)", y = "Sepal width (cm)") +
+  geom_smooth(method = "lm")
+
+```
+
+#### A word on aesthetics
+
+Aesthetics (plotted variables) don't need to be specified in the `ggplot()` component (since that's not the component that draws the points), but can be defined within the geom. However, this can lead to repetitive code when using multiple geoms.   
+
+When aesthetics are defined in `ggplot()`, they are, by default, *inherited* to the geoms that follow. If needed, this can be overridden by specifying new aesthetics.
+
+```{r}
+iris %>%
+  ggplot() + 
+  geom_point(aes(Sepal.Length, Sepal.Width)) + 
+  labs(title = "Scatter plot of sepal length and sepal width", subtitle = "Iris dataset", 
+       x = "Sepal length (cm)", y = "Sepal width (cm)") +
+  geom_smooth(aes(Sepal.Length, Sepal.Width), method = "lm")
+
+```
+
+#### Plotting categories
+
+Let's set color based on species.  
+Categories can also be denoted by e.g. shape instead of (or in addition to) color.
+
+```{r}
+iris %>%
+  ggplot(aes(Sepal.Length, Sepal.Width, color = Species)) + 
+  geom_point() + 
+  labs(title = "Scatter plot of sepal length and sepal width", subtitle = "Iris dataset", 
+       x = "Sepal length (cm)", y = "Sepal width (cm)") 
+
+```
+
+
+
