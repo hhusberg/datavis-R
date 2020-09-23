@@ -1,0 +1,325 @@
+---
+title: "Data wrangling"
+output: html_notebook
+---
+
+## Loading libraries
+
+It's good to have a chunk in the beginning of your document, where all necessary libraries are loaded. That way, anyone going through your document can instantly see which packages are required. 
+
+```{r setup}
+library(tidyverse)
+library(lubridate) # for working with dates
+```
+
+
+Let's create some data first: respondents from four groups (1-4), their birth dates, genders, and response to an attitude item on a five-point Likert scale.  
+**Note: normally you would read your data from a file instead of creating random data, so feel free to skip this chunk.**
+```{r}
+set.seed(1)
+df  <- tibble(group = sample(c(rep(1:4, each=12), rep(999,2))),
+              birthdate = c(seq(as.Date('1980/01/01'), as.Date('1990/01/01'), by="day")) %>% sample(50),
+              gender = sample(c('M', 'F'), 50, replace=TRUE),
+              attitude = sample(c('Strongly disagree', 'Disagree', 'Neither agree or disagree', 'Agree', 'Strongly agree'), 50, replace=TRUE)) 
+  
+
+df
+
+```
+
+### Tidying data
+
+When taking the summary of df, we see that some things could be modified in the data. For example, birth date could be turned into age in years. There also seems to be some missing values in the group variable, coded by 999.  
+
+```{r}
+df %>% summary()
+```
+
+Let's compute age from birth date, and recode 999 to NA (missing). **We can do this in the same mutate function**.  
+We also remove the variable birth date.
+
+```{r}
+
+df <- df %>%
+  mutate(age = time_length(interval(birthdate, today()), "years") %>% floor(), # floor rounds downwards
+         group = na_if(group, 999)) %>%
+  select(-birthdate)
+
+```
+
+
+```{r}
+summary(df)
+```
+
+Sometimes it may be a good idea to produce a "subject ID" variable if there isn't one already. The easiest way to do this is to use row names. (This time we won't save the ID variable to the data frame.)  
+```{r}
+
+df %>%
+  rownames_to_column('sbj_id')
+
+```
+
+
+### Overview of data
+
+We can inspect the unique values of each variable with the function distinct(). It can also be used with multiple variables.
+
+```{r}
+df %>%
+  distinct(gender)
+```
+
+The values will be printed in the order they appear in the data.
+
+```{r}
+df %>%
+  distinct(group)
+
+```
+
+
+```{r}
+df %>%
+  distinct(attitude)
+```
+
+With count(), we can count observations in each group (or combination of groups).
+
+```{r}
+df %>%
+  count(group)
+```
+
+
+```{r}
+df %>%
+  count(group, gender) %>% # count() is a combination of group_by() and tally()
+  arrange(desc(n)) %>%
+  arrange(group)
+```
+
+
+It's relatively straightforward to turn counts into percentages.
+```{r}
+df %>%
+  count(gender) %>%
+  mutate(percentage = prop.table(n))
+```
+
+When you use group_by() and are not summarising, **remember to ungroup afterwards**!  
+
+```{r}
+df %>%
+  count(group, gender) %>%
+  group_by(group) %>% # find the percentages of F/M within each group
+  mutate(percentage = prop.table(n) %>% round(2)) %>%
+  ungroup()
+
+```
+
+
+```{r}
+grouped_df <- df %>%
+  group_by(gender)
+
+grouped_df %>%
+  summarise(mean_age = mean(age))
+```
+
+### Other useful functions
+
+Change column order with relocate()
+```{r}
+df %>%
+  relocate(gender, .before = age)
+
+```
+
+Rename columns with rename()
+```{r}
+df %>%
+  rename(attitude_chr = attitude)
+
+```
+
+Recode values with recode()
+```{r}
+df %>%
+  mutate(gender = recode(gender, M = 0, F = 1))
+
+```
+
+## Factors
+
+Let's have a closer look at categorical variables. There should be 3 categorical variables in the data: group, gender and attitude (to some extent).  
+
+There are some issues with our categorical variables. The variable **group** is numeric, when it clearly should be categorical. Also, the categories of the **attitude** variable should have a specific order. These can be specified by using **factors**.
+
+Factors are categorical variables, which can be alphabetic or numeric. They are different from characters in that they have a limited set of **levels** (categories), which can be ordered. When running analyses, one of the levels can be set as the reference level. You will see that besides being a crucial part of conducting analyses, factors are very useful in plotting.  
+
+Let's convert all variables except age to factors. Multiple variables can be mutated at once with *across*.
+
+```{r}
+df <- df %>%
+  mutate(across(!age, factor)) # or mutate(across(c(group, gender, attitude), factor))
+
+# or mutate(group = factor(group), gender = factor(gender), attitude = factor(attitude))
+
+df
+```
+
+
+When looking at the structure of df, we see that the factors have been given levels. Levels are underlying numbers beginning from 1, and they are assigned in alphabetical order.    
+
+```{r}
+str(df)
+```
+
+```{r}
+levels(df$attitude)
+```
+
+
+We can specify that a factor must be ordered by using `ordered = TRUE` and giving the correct order:
+```{r}
+df <- df %>%
+  mutate(attitude = factor(attitude, ordered = TRUE, levels = c('Strongly disagree', 'Disagree', 'Neither agree or disagree', 'Agree', 'Strongly agree')))
+```
+
+Let's look at the structure again:
+```{r}
+str(df)
+```
+
+```{r}
+levels(df$attitude)
+```
+
+The order of the factor levels is used by plotting functions. 
+```{r}
+df %>%
+  mutate(attitude = as.character(attitude)) %>%
+  ggplot(aes(attitude)) + geom_bar() + 
+  labs(title = 'attitude as character') + 
+  theme_minimal()
+
+df %>%
+  ggplot(aes(attitude)) + geom_bar() + 
+  labs(title = 'attitude as ordered factor') + 
+  theme_minimal()
+
+```
+
+Factor levels are preserved even if there were no observations for a level.
+```{r}
+df %>%
+  filter(attitude != 'Strongly disagree') %>%
+  ggplot(aes(attitude)) + geom_bar()  + 
+  scale_x_discrete(drop = FALSE) + 
+  theme_minimal()
+
+```
+
+
+### Using Likert scales as numeric
+It's common to convert Likert-type scales to numeric values and to use them in analyses as such. Factors can be converted to their underlying numeric values with as.numeric(). 
+
+```{r}
+
+df <- df %>%
+  mutate(attitude_num = as.numeric(attitude))
+
+df
+
+df %>%
+  distinct(attitude, attitude_num)
+  
+```
+
+Character elements, in contrast, cannot be converted to numeric, because they have not been given levels (ordered or not).
+
+```{r}
+as.numeric("word")
+```
+
+We can now calculate summary statistics about attitude.
+
+```{r}
+df %>%
+  group_by(group, gender) %>%
+  summarise(attitude_mean = mean(attitude_num),
+            attitude_median = median(attitude_num),
+            attitude_sd = sd(attitude_num),
+            n = n()) %>%
+  mutate(across(is_double, round, 2)) # this rounds the mean, median and sd to 2 decimals
+
+```
+
+
+## Package conflicts
+
+Many packages contain functions with identical names, which may cause your code to produce unwanted output. When loading a package, there is a warning of possible conflicts between packages. For example, dplyr::filter() masks stats::filter() (stats is a package that is loaded by default).  
+
+If you don't want e.g. tidyverse functions to become masked, it's good practice to load the tidyverse library **last**, or use library::function() notation. Recall that tidyverse is in fact a collection of packages:  
+
+- ggplot2 (plotting)  
+- dplyr (data wrangling)  
+- tidyr (tidying data)  
+- readr (reading files)  
+- purrr (applying functions)  
+- tibble (improved data frames)  
+- stringr (working with strings)  
+- forcats (working with factors)  
+
+
+Let's see what kind of conflicts there might be. For example, if we want to filter the above data by gender, we would use:
+```{r}
+df %>%
+  filter(gender == 'M')
+
+```
+
+The filter() function is contained in the **dplyr** package. This works because we have loaded the dplyr package (with tidyverse).  
+
+Let's *detach* (unload) the dplyr package to see what happens if we use filter() without it.
+```{r}
+
+detach(package:tidyverse, unload=TRUE)
+
+```
+
+```{r}
+df %>%
+  filter(gender == 'M')
+
+```
+
+Now the filtering doesn't work, because it tries to use stats::filter(), which is meant for time series data.  
+
+When we use dplyr::filter(), it works again. (**Note**: even if you use this syntax, please load the packages separately to denote clearly which packages are needed.)
+
+```{r}
+df %>%
+  dplyr::filter(gender == 'M') 
+
+```
+
+A well-known pair of libraries to cause issues are **dplyr** (part of tidyverse) and **plyr** (not in tidyverse, but useful in data wrangling). R even warns you about possible conflicts:  
+
+```{r}
+library(dplyr)
+library(plyr)
+```
+
+```{r}
+df %>%
+  dplyr::summarise(n = n())
+
+```
+
+
+```{r}
+detach(package:plyr, unload=TRUE)
+```
+
