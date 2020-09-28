@@ -15,5 +15,5 @@ Links will be published after the deadlines :)
 
 ### Excercise Week 1
 
-<a href>https://github.com/hhusberg/datavis-R/week1/hh_excercise_week1.html</a>
+<a href>https://github.com/hhusberg/datavis-R/hh_excercise_week1.html</a>
 
