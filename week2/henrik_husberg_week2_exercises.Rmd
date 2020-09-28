@@ -1,8 +1,10 @@
 ---
 title: "Week 2 Exercises"
+author: Henrik Husberg
 output:
   html_document:
     df_print: paged
+    toc: true
 ---
 
 # Exercise 1
@@ -13,6 +15,7 @@ Create a new code chunk where you load the tidyverse package. In the chunk setti
 
 ```{r include=F}
 library(tidyverse)
+library(ggplot2)
 ```
 
 #### 1.2
@@ -39,8 +42,13 @@ There is something to fix in three of the variables. Explore the data and descri
 ```{r}
 ## Henrik: Here I'll take a look at the structure of the data to see if I can spot any oddities:
 str(df)
+summary(df)
+distinct(df, group)
+distinct(df, gender)
 ```
 Henrik: Looking at the data, we see that the variable score2 seems to be coded as a string, not numerical. So we need to convert score2 to numerical data.
+In the gender variable we have some apparently missing data coded as 999, we will convert those to NA:s. Also, the gender variable should be coded as a factor.
+
 
 # Exercise 2
 
@@ -48,15 +56,24 @@ Henrik: Looking at the data, we see that the variable score2 seems to be coded a
 
 Make the corrections you described above.
 ```{r}
-df <- transform(df, score2 = as.numeric(score2))
+##Alt: df <- transform(df, score2 = as.numeric(score2))
+df <- df %>%
+  mutate(score2 = as.numeric(score2)) %>%
+  mutate(gender = na_if(gender, 999)) %>%
+  mutate(gender = as.factor(gender)) 
+  
+summary(df)
 str(df)
 ```
-Henrik: Now the variable score2 is coded as numerical data and we can use it in our further analyses.
+Henrik: Now the variable score2 is coded as numerical data, group as integer, gender as a factor with two leves and missing values as NA and we can use the data in our further analyses.
 
 #### 2.2
 
 Count observations by group and gender. Arrange by the number of observations (ascending).
 ```{r}
+df %>%
+  count(group, gender) %>%
+  arrange(n)
 
 ```
 
@@ -68,7 +85,9 @@ Count observations by group and gender. Arrange by the number of observations (a
 Create a new variable, **score_diff**, that contains the difference between score1 and score2.
 
 ```{r}
-
+df <- df %>%
+  mutate(score_diff = score2 - score1)
+str(df)
 ```
 
 #### 3.2
@@ -78,6 +97,8 @@ Compute the means of score1, score2, and score_diff.
 **Hint**: Like mutate(), summarise() can take multiple variables in one go.
 
 ```{r}
+df %>%
+  summarise(mean1 = mean(score1), mean2 = mean(score2), mean_diff = mean(score_diff))
 
 ```
 
@@ -86,6 +107,10 @@ Compute the means of score1, score2, and score_diff.
 Compute the means of score1, score2, and score_diff **by gender**.
 
 ```{r}
+df %>%
+  group_by(gender) %>%
+  summarise(mean1 = mean(score1), mean2 = mean(score2), mean_diff = mean(score_diff)) %>%
+  ungroup(df)
 
 ```
 
@@ -96,7 +121,8 @@ Compute the means of score1, score2, and score_diff **by gender**.
 
 Using ggplot2, create a scatter plot with score1 on the x-axis and score2 on the y-axis. 
 ```{r}
-
+df %>%
+  ggplot(aes(x=score1, y=score2)) + geom_point()
 ```
 
 
@@ -108,7 +134,8 @@ Set the output figure width to 10 and height to 6.
 
 
 ```{r}
-
+df %>%
+  ggplot(aes(x=score1, y=score2, color=gender), width = 10, height = 6) + geom_point()
 ```
 
 
