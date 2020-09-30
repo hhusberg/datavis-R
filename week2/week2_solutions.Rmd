@@ -1,0 +1,167 @@
+---
+title: "Week 2 Exercises"
+author: "Tuisku Tammi"
+date: "September 29th, 2020"
+output: 
+  html_document:
+    toc: true
+---
+
+# Exercise 1
+
+#### 1.1
+
+Create a new code chunk where you load the tidyverse package. In the chunk settings, suppress any output messages.  
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+#### 1.2
+
+The tibble *df* has 60 observations (rows) of variables (columns) group, gender, score1 and score2 (continuous scores from two tests). Each row represents one participant.  
+```{r include = F}
+# this chunk generates the data, and you can ignore it
+set.seed(1)
+df  <- tibble(group = sample(c(rep(1:2, each=30))),
+              gender = sample(c(rep(c('M', 'F'), 28), rep(999,4))),
+              score1 = rnorm(60, 18, 2),
+              score2 = as.character(runif(60, 0.7, 1.1)*score1))
+  
+```
+
+```{r}
+df
+```
+
+
+There is something to fix in three of the variables. Explore the data and describe what needs to be corrected.  
+
+**Hint**: You can use e.g. str(), distinct(), and summary() to explore the data.    
+
+**Based on summary(), the group variable is numeric, even though it should be categorical (factor). Also, score2 is a character variable, but it should be numeric.**
+
+**Looking at the distinct values of group and gender reveals that some value of gender have been coded as "999". These need to be changed into NA (missing).**
+```{r}
+summary(df) # group is numeric, and score2 is character
+
+df %>%
+  distinct(group, gender) # gender has missing values coded as "999"
+
+```
+
+
+# Exercise 2
+
+#### 2.1
+
+Make the corrections you described above.
+
+**Note: if you convert gender to factor before recoding the "999" values, "999" will still remain in the factor levels (although there are no observations; see `levels(df$gender)`). This might cause some problems later (but not in these exercises).**
+
+```{r}
+df <- df %>%
+  mutate(group = factor(group),
+         score2 = as.numeric(score2)) %>%
+  mutate(gender = na_if(gender, "999") %>% factor)
+
+```
+
+```{r}
+summary(df)
+```
+
+
+#### 2.2
+
+Count observations by group and gender. Arrange by the number of observations (ascending).
+```{r}
+df %>% 
+  count(group, gender) %>%
+  arrange(n) # ascending by default; use desc() for descending
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Create a new variable, **score_diff**, that contains the difference between score1 and score2.
+
+```{r}
+df <- df %>% 
+  mutate(score_diff = score1 - score2)
+```
+
+#### 3.2
+
+Compute the means of score1, score2, and score_diff.
+
+**Hint**: Like mutate(), summarise() can take multiple variables in one go.
+
+```{r}
+
+df %>%
+  summarise(across(where(is.numeric), mean))
+
+# OR:
+# df %>%
+#   summarise(across(score1:score_diff, mean))
+
+# OR:
+# df %>%
+#   summarise(score1 = mean(score1),
+#             score2 = mean(score2),
+#             score_diff = mean(score_diff))
+  
+```
+
+#### 3.3
+
+Compute the means of score1, score2, and score_diff **by gender**.
+
+```{r}
+df %>%
+  group_by(gender) %>%
+  summarise(across(where(is.numeric), mean)) %>%
+  ungroup()
+
+```
+
+
+# Exercise 4
+
+#### 4.1
+
+Using ggplot2, create a scatter plot with score1 on the x-axis and score2 on the y-axis. 
+```{r}
+
+df %>%
+  ggplot(aes(score1, score2)) + geom_point()
+
+```
+
+
+#### 4.2
+
+Continuing with the previous plot, colour the points based on gender. 
+
+Set the output figure width to 10 and height to 6.
+
+
+```{r fig.width=10, fig.height=6}
+df %>%
+  ggplot(aes(score1, score2, colour = gender)) + geom_point()
+
+```
+
+
+# Exercise 5
+
+#### 5.1
+
+Add the author (your name) and date into the metadata section. Create a table of contents.  
+
+#### 5.2
+
+Knit your document to HTML by changing `html_notebook` to `html_document` in the metadata, and pressing Knit.   

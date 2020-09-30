@@ -1,0 +1,530 @@
+---
+title: "Data wrangling and plotting"
+output: html_notebook
+---
+
+```{r}
+
+library(data.table)
+library(tidyverse)
+
+```
+
+
+# Reading data from file
+
+Importing data into R is quite simple if you know 1. what your working directory is, 2. where your data file is located, and 3. what the file format is.  
+
+#### Working directory
+
+You can find out your **working directory** (i.e. the folder you are operating in) with the `getwd()` command. In R Markdown chunks, the working directory defaults to the folder where the .Rmd file is located.
+
+```{r}
+getwd()
+
+```
+
+You can **set** your working directory with `setwd()`. If you run this in a notebook chunk, there will be a message about the working directory reverting back after the current chunk.  
+
+```{r}
+setwd('C:/Users/tuisku.tammi/Documents/GitHub/datavis-R') # change this to match your own computer's directories
+
+```
+
+If you run `setwd()` in the **console** (or an .R script), the working directory will be changed permanently (until you change it again or restart RStudio).
+
+#### Listing files
+
+Usually, you want your data file to be in the working directory (or a sub-directory of the working directory). Besides checking the files and sub-folders of the working directory in File Explorer, you can list them in R.  
+
+```{r}
+setwd('C:/Users/tuisku.tammi/Documents/GitHub/datavis-R')
+
+list.files() # lists files of the current working directory
+
+list.files('week3') # or a sub-directory
+
+list.files('C:/Users/tuisku.tammi/Documents/GitHub/datavis-R') # or a specific full path
+
+list.files('C:/Users/tuisku.tammi/Documents/GitHub/datavis-R', full.names = T) # full.names = T for full path
+
+```
+
+Using `full.names = T` gives you the complete path to the files. You *can* use the full name of the path to read files, but don't need to, if the beginning of the path is your working directory. For example, if your data file ('data.txt') is located in *'C:/Users/user.name/Documents/R_course/week3'*, and your working directory is set to *'C:/Users/user.name/Documents/R_course'*, you would only need to add *'week3/data.txt'* when you read the file. Also, **using full paths makes it difficult to open the files on another computer!**.
+
+#### Projects
+
+Using projects helps with all this hassle. When you open an .R or .Rmd file from a project, your working directory is restored to the project folder, and all you need is in one place. Later, e.g. when saving figures, this is very useful.  
+
+#### Reading the file
+
+There are a few options for reading files into R. The most common base R commands are `read.table()` and `read.csv()`. You can try them out to see how they work. Here, we'll use functions from the **readr** package (part of tidyverse). They are useful because when reading the file, they print out the columns and column types found. They are also faster than base R functions.    
+
+Comma-delimited files are read with `read_csv()`. It uses the first row of the data as column names. You can use `column_names = FALSE` to not read the first row as column names, or `skip = n` to skip the first `n` rows.
+
+```{r}
+df <- readr::read_csv('region_scores.csv')
+
+```
+
+Other common readr functions include `read_csv2()` for semicolon-demilited files, `read_tsv()` for tab-delimited files, and `read_delim()` for any delimiter.  
+
+#### Encoding
+
+You might have some issues with special characters (å, ä, ö), depending on your computer's locale (language/encoding settings). 
+
+```{r}
+
+df %>%
+  distinct(region)
+
+```
+
+The encoding of a file can be guessed and given to the `read_csv()` function.  
+
+```{r}
+
+guess_encoding('region_scores.csv')
+
+```
+
+```{r}
+
+df <- readr::read_csv('region_scores.csv', locale = locale(encoding = "ISO-8859-1"))
+
+```
+
+```{r}
+
+df %>%
+  distinct(region)
+
+```
+
+If you don't know how your data file is formatted, try `fread()` from the **data.table** library. It attempts to automatically detect the delimiters, encoding etc (and usually succeeds). However, check the result carefully.  
+
+```{r}
+#df <- data.table::fread('region_scores.csv')
+```
+
+
+Other data formats, such as SPSS data (.sav), require specific libraries to open data. These include for example [haven](https://haven.tidyverse.org/) and [foreign](https://www.rdocumentation.org/packages/foreign) for SPSS, SAS, and Stata files, [readxl](https://readxl.tidyverse.org/) for Excel files, and [jsonlite](https://www.rdocumentation.org/packages/jsonlite) for json files. We won't go into the details here, but if you have questions about opening a specific dataset, please ask!  
+
+#### R-specific file formats
+
+R objects can also be saved in its own format (.RDS or RData). These files are easily read into R, but are difficult to open in other programs. They are useful when you want to save intermediate results of a project to a file and easily continue where you left off. You can save one object with RDS, or multiple objects with RData.  
+
+(If you save your workspace when quitting R, you will end up with an .RData file.)  
+
+```{r}
+saveRDS(df, file = 'region_scores.rds')
+obj <- readRDS(file = 'region_scores.rds')
+
+regions_only <- df$region
+
+save(df, regions_only, file = "data_and_regions.RData") # object names will be saved
+load('data_and_regions.RData') # no assignment to object needed
+
+```
+
+
+# Data wrangling and plotting
+
+We'll use the region_scores.csv dataset. It has 6 columns of 240 observations.
+
+```{r}
+
+glimpse(df) # tidyverse equivalent of str()
+
+summary(df)
+
+```
+
+
+There are no missing values this time, but we'll make some variable class transformations like before.   
+
+```{r}
+df <- df %>%
+  mutate(id = as.character(id),
+         region = factor(region),
+         education = factor(education, ordered = TRUE), # you could supply labels as well
+         gender = factor(gender))
+
+
+glimpse(df)
+
+```
+
+
+### Cutting values into intervals
+
+ggplot2 has its own functions to recode (cut) continuous variables into categorical ones. `cut_interval()` makes n groups with equal range, `cut_number()` makes n groups with (approximately) equal number of observations; `cut_width()` makes groups of a certain width.  
+
+Let's see what happens when we cut the **score** variable with each of these functions. The original range of score values is `r range(df$score)`.  
+
+- to 5 groups with equal range:
+
+```{r}
+df %>%
+  mutate(score_group = cut_interval(score, 5)) %>% # range width is (max - min) / number of groups
+  count(score_group)
+
+```
+
+- to 5 groups with equal number of observations:
+
+```{r}
+df %>%
+  mutate(score_group = cut_number(score, 5)) %>% # each group has 240 / 5 = 48 observations
+  count(score_group)
+
+```
+
+- to groups of width 10:
+
+```{r}
+
+df %>%
+  mutate(score_group = cut_width(score, 10, boundary = 0)) %>% # boundary sets the minimum boundary 
+  count(score_group)
+
+```
+
+The different kinds of brackets denote whether the endpoints are included in the interval: for example, (10,20] denotes that 10 is excluded and 20 is included.  
+
+You can also specify your own labels.  
+
+Let's save one of these results with labels to our df:
+
+```{r}
+df <- df %>%
+  mutate(score_group = cut_width(score, 10, boundary = 0, 
+                                 labels = c('-10','11-20','21-'))) 
+```
+
+```{r}
+df %>% 
+  distinct(score_group)
+
+```
+
+## Bar plots: plotting summary statistics
+
+Let's calculate some summary statistics for different education levels and score groups.
+
+```{r}
+df_stats <- df %>%
+  group_by(education, score_group, .drop = FALSE) %>% # there are no observations some of the combinations, but we don't want to drop them
+  summarise(mean_age = mean(age),
+            sd_age = sd(age),
+            n = n()) %>%
+  ungroup()
+
+df_stats
+
+```
+
+We can easily visualise these statistics with bar plots. In ggplot2, bar plots can be produced in many ways, which can be confusing at first. **Roughly speaking, there are two different functions: `geom_bar()` for when we have *not* summarised our data beforehand, and `geom_col()` for when we have already calculated the summary statistics (like we have here).**  
+
+#### geom_col
+
+Since `geom_col()` requires ready-calculated summary statistics, we need to start with the df_stats data frame. Let's plot a bar plot of mean ages, grouped by education (x-axis) and score group (fill).  
+
+```{r}
+df_stats %>%
+  ggplot(aes(education, mean_age, fill = score_group)) + 
+  geom_col(position = "dodge")  # without position = "dodge", the bars would be stacked
+
+```
+
+Or we can use subplots (facets) for score groups, which makes it a bit easier to spot the missing values.  
+
+```{r}
+df_stats %>%
+  ggplot(aes(education, mean_age)) + 
+  geom_col() +  # no need for position = "dodge"
+  facet_wrap(~score_group)
+
+```
+
+If we want to add error bars to this plot, we again need to calculate the values before plotting. Error bars are then added with `geom_errorbar()`, which takes minimum and maximum y-values as arguments. (Note: these values could also be calculated explicitly before plotting, by mutating new variables ymin and ymax).  
+
+```{r}
+df_stats %>%
+  mutate(se = sd_age/sqrt(n)) %>% # calculate standard error
+  ggplot(aes(education, mean_age)) + 
+  geom_col() +  
+  facet_wrap(~score_group) +
+  geom_errorbar(aes(ymin = mean_age - se, ymax = mean_age + se)) # height of error bars = 2 * se
+  
+```
+
+#### geom_bar
+
+In contrast to `geom_col()`, `geom_bar()` can calculate summary statistics while plotting. This means that we can just supply our original data frame and specify the variable and the summary statistic that we want to get. In this case, we want the mean of age (by education and score group).   
+
+```{r}
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_bar(stat = "summary", fun.data = "mean_se") +
+  facet_wrap(~score_group)
+
+```
+
+(The underlying stat argument of `geom_col()` is "identity" - it leaves the data as is. `geom_bar()` could be used in the same way as `geom_col()` by specifying **stat = "identity"**; essentially, `geom_bar(stat = "identity")` is equal to `geom_col()`.)
+
+The **fun.data** argument specifies the function that we're applying to the data; it summarises y at each x.
+
+Error bars can be added with `stat_summary()`.
+
+```{r}
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_bar(stat = "summary", fun.data = "mean_se") +
+  facet_wrap(~score_group) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se") 
+
+```
+
+In fact, you could replace geom_bar with stat_summary, too. 
+```{r}
+df %>%
+  ggplot(aes(education, age)) + 
+  stat_summary(geom = "bar", fun.data = "mean_se") +
+  facet_wrap(~score_group) +
+  stat_summary(geom = "errorbar", fun.data = "mean_se") 
+
+```
+
+There are pros and cons to both ways of plotting. By calculating your summary statistics beforehand, you can check the values and know exactly what you're plotting. On the other hand, it is less flexible, because if you change the grouping variables, you need to calculate the numbers again; with geom_bar(), you can just supply the groups (colours, facets, etc.) while you're plotting, and the output will be adjusted.  
+
+For example, if we wanted to use the df_stats data frame to plot **only** the mean ages of score groups, we would get a weird result (mean ages of over 100!). This is due to the fact that we used more than one grouping variable when calculating the summary statistics, and the groups shown in the plot should be consistent with that.  
+
+```{r}
+df_stats %>%
+  ggplot(aes(score_group, mean_age)) + # seems to add the mean values together for each group
+  geom_col()
+
+```
+
+## Subplots
+
+As we have seen, subplots can be plotted with `facet_wrap()`. An alternative is `facet_grid()`. They are practically almost interchangeable, but there are some minor differences in how they work.  
+
+When plotting subplots, `facet_wrap()` attempts to save space. The number of rows and columns can be adjusted. `facet_grid()`, on the other hand, makes a fixed grid based on the faceting variables (rows = variable 1, columns = variable 2).
+
+
+```{r fig.height=10, fig.width=10}
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_bar(stat = "summary", fun.data = "mean_se") +
+  facet_wrap(region~gender)
+
+```
+
+
+```{r fig.height=20, fig.width=6}
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_bar(stat = "summary", fun.data = "mean_se") +
+  facet_grid(region~gender)
+
+```
+
+## Other figure types
+
+### Boxplots and violin plots
+
+```{r}
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_boxplot() +
+  facet_wrap(~score_group)
+
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_violin() +
+  geom_dotplot(binaxis = "y", stackdir = "center", alpha = .3, binwidth = 1) +
+  facet_wrap(~score_group)
+
+df %>%
+  ggplot(aes(education, age)) + 
+  geom_violin() +
+  geom_jitter(alpha = .3) +
+  facet_wrap(~score_group)
+
+```
+### Histograms and density plots
+
+
+```{r}
+df %>%
+  ggplot(aes(score, fill = gender)) + 
+  geom_histogram(position = "identity", alpha = .5, binwidth = 1) # position = "stack" by default
+
+```
+
+
+```{r}
+df %>%
+  ggplot(aes(score, fill = gender)) + 
+  geom_density(alpha = .5) # position = "identity" by default
+
+```
+
+
+## Using factors in plotting
+
+Factor levels can be used to change the order of categories on the axes or facets. (When plotting a character vector, the categories are in alphabetical order.) Some important functions from the **forcats** library are `fct_rev()` (reverse the order of levels), `fct_reorder()` (reorder levels based on another variable), `fct_relevel()` (reordering manually), and `fct_lump()` (collapsing levels into 'other' based on frequencies).  
+
+If we want to reverse the order of education groups on the x-axis, we can use `fct_rev()` either before plotting (i.e. assigning the new order to the variable), or within the plotting function.
+
+```{r}
+df_stats %>%
+  ggplot(aes(fct_rev(education), mean_age)) + 
+  geom_col() +  # no need for position = "dodge"
+  facet_wrap(~score_group)
+```
+
+Here, we group together the least frequent (less than 60 observations) categories of score_group. There are other criteria you can use. See `?fct_lump()` for other options!
+
+```{r}
+df %>%
+  mutate(score_group = fct_lump_min(score_group, 60)) %>%
+  count(score_group)
+
+```
+
+**Reordering factor levels based on another variable** helps in making nice plots. In our data frame df, **region** is a factor with 17 levels. Let's make boxplots of age by region, and then order the regions by age.  
+
+
+
+```{r}
+df %>%
+  ggplot(aes(region, age)) + geom_boxplot()
+
+```
+In the plot above, it's difficult to read the region labels. There are many ways to overcome this (adjust plot size, change the angle of axis labels) - but since there are 17 levels, simply switching the x- and y-axes helps. We can easily do this with `coord_flip()`. The result is the same as if you used x = age, y = region in the aesthetics.  
+
+```{r}
+df %>%
+  ggplot(aes(region, age)) + 
+  geom_boxplot() +
+  coord_flip()
+
+```
+
+Now, let's reorder the region categories by age. Similarly to `fct_rev()`, this can be done before or while plotting. Here, we mutate the reordered region variable beforehand.    
+
+```{r}
+
+df %>%
+  mutate(region_reordered = fct_reorder(region, age)) %>%
+  ggplot(aes(region_reordered, age)) + 
+  geom_boxplot() +
+  coord_flip()
+
+```
+
+By default, the levels are ordered based on the median of age. If we wanted to use something else instead, we should either specify the summary function within `fct_reorder()`, or use a summarised variable.  
+
+We can summarise a variable without affecting the rest of the data frame by using `mutate()` instead of `summarise()`. For example, if we mutate a mean of some variable, the mean values are simply added to a new column. This leads to repetition of values, but can be useful if we want to use both the raw and summarised values in plotting.   
+
+**After using group_by, especially with mutate, it's very important to ungroup!**  
+
+```{r}
+df <- df %>%
+  group_by(region) %>%
+  mutate(mean_age = mean(age)) %>% # see what happens with summarise(mean_age = mean(age))
+  ungroup()
+
+df
+  
+```
+
+Now, we can use the mean_age variable to plot mean values and order factor levels. Note that the order is slightly different because we're using the mean, not the median.    
+
+The reordering is done within the aesthetics - this is seen on the y-axis label. It doesn't make much difference if you're going to give new labels anyway.  
+
+```{r}
+df %>%
+  ggplot(aes(fct_reorder(region, mean_age), mean_age)) + # reordering done within ggplot - be careful with brackets...
+  geom_point() + 
+  coord_flip()
+  
+```
+
+This code produces the same output while using the raw age variable in reordering and plotting. We haven't specified a summary function to stat_summary, and it will use "mean_se" by default.     
+
+```{r}
+df %>%
+  ggplot(aes(fct_reorder(region, age, mean), age)) +
+  stat_summary(geom = "point") +
+  coord_flip() +
+  labs(title = "Mean ages by region", x = "Region", y = "Age") # x = region and y = age still after coord_flip
+  
+```
+
+Lines representing standard errors of the mean can be added quite easily with geom = "linerange". There is also a geom = "pointrange" that plots both the points and the lines!    
+
+Let's save our plot for later use.  
+
+```{r}
+ageplot <- df %>%
+  ggplot(aes(fct_reorder(region, age, mean), age)) + 
+  stat_summary(geom = "point", fun.data = "mean_se") +
+  stat_summary(geom = "linerange", fun.data = "mean_se") +
+  coord_flip() +
+  labs(title = "Mean ages by region", subtitle = "Lines show standard error of the mean", x = "Region", y = "Age") 
+  
+
+ageplot
+```
+
+
+
+
+## Themes
+
+There are built-in themes in ggplot2 (and a lot more in dedicated libraries). Check them out [here](https://ggplot2.tidyverse.org/reference/ggtheme.html). 
+```{r}
+ageplot + theme_bw()
+
+```
+
+```{r}
+ageplot + theme_classic()
+
+```
+
+```{r}
+ageplot + theme_void()
+
+```
+
+#### Modifying the components of a theme
+
+If you're not completely satisfied with any of the built-in themes, there are [a lot of things](https://ggplot2.tidyverse.org/reference/theme.html) you can modify with theme arguments! If you need to change the position or appearance of legends or axis labels/ticks, aspect ratio, font size, plot borders, etc. this is where it's done. Some of the arguments may look confusing and require some experimentation, but there are plenty of examples out there - whatever you wish to modify, it's very probable that someone has already tried it.  
+
+Note that if you make a modification inside `theme()`, and then apply a built-in theme, your modifications may be overwritten. For this reason, it's best to leave the modifications last.   
+
+Some examples of theme modifications:
+
+```{r}
+ageplot +
+  theme_bw() +
+  theme(plot.title = element_text(size = 20), # change plot title size
+        plot.background = element_rect(fill = "#66a188"), # change background colour (using hex colours/colour names)
+        panel.grid.major.y = element_blank(), # remove horizontal gridlines
+        axis.text = element_text(colour = "#2e4070"), # change axis label colour
+        axis.ticks.y = element_blank()) # remove ticks from y-axis (region)
+
+```
+Some things can be modified within the built-in theme component itself, such as base font size and family (used in *all* text).  
+
+```{r}
+ageplot +
+  theme_bw(base_size = 20, base_family = "serif") 
+```
+
+

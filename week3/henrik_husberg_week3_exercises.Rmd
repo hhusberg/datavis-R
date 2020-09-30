@@ -1,0 +1,147 @@
+---
+title: "Week 3 Exercises"
+output: html_document
+---
+
+# Exercise 1
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+#### 1.1
+
+Read the *region_scores.csv* data into R. It should have 240 observations of 6 variables.  
+
+```{r}
+getwd()
+df <- readr::read_csv('region_scores.csv', locale = locale(encoding = "ISO-8859-1"))
+df %>%
+  distinct(region)
+```
+
+
+#### 1.2
+
+Cut the continuous variable **age** into a categorical variable **age_group** that has groups of width 10. Use ggplot2's cutting function.  
+
+Count observations by age group.
+
+```{r}
+df <-df %>%
+  mutate(age_group = cut_width(age, 10))
+df %>%
+  count(age_group)
+str(df)
+```
+
+
+# Exercise 2
+
+The chunk below is supposed to produce a plot but it has some errors.  
+
+The figure should be a scatter plot of **age** on the x-axis and **score** on the y-axis, with points coloured by **education level** (3 levels). It should also have three linear regression lines, one for each of the education levels.  
+
+Fix the code to produce the right figure.  
+
+What happens if you use `geom_jitter()` instead of `geom_point()`?  
+
+**Hint**: Examine the code bit by bit: start by plotting just the scatter plot without `geom_smooth()`, and add the regression lines last.  
+
+```{r}
+str(df)
+## The education variable is numerical, so first I convert it to factor:
+df <- df %>%
+  mutate(education = as_factor(education))
+str(df)
+## Now the data should be ok for the required plot
+## For plot 1 I corrected the code so that the x and y-axes as well as the coloring are defined inside the aes-function
+p1 <- df %>% 
+  ggplot(aes(x=age, y=score, color=education)) + geom_point() + geom_smooth(method = "lm")
+## For the second plot I change geom_point to geom_jitter
+p2 <- df %>% 
+  ggplot(aes(x=age, y=score, color=education)) + geom_jitter() + geom_smooth(method = "lm")
+## Finally, I compare the plots
+p1
+p2
+## In plot 2, the points are randomly spread out a bit on the y-axis so as to make it easier to spot the different points.
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Calculate the mean, standard deviation (sd), and number of observations (n) of **score by education and age group**. Also calculate the standard error of the mean (by using sd and n). Save these into a new data frame (or tibble) named edu_age_stats.  
+
+```{r}
+edu_age_stats <- df %>%
+  group_by(education, age_group) %>%
+  summarise(mean_score = mean(score),
+            sd_score = sd(score),
+            n = n()) %>%
+  mutate(se_score = sd_score/sqrt(n)) %>%
+  ungroup()
+str(edu_age_stats)
+```
+
+#### 3.2
+
+Using edu_age_stats, plot a bar plot that has **age group** on the x-axis, **mean score** on the y-axis, and **education levels** in subplots (facets).  
+
+Use `geom_errorbar()` to add error bars that represent standard errors of the mean.  
+
+```{r}
+edu_age_stats %>%
+  ggplot(aes(age_group, mean_score)) + geom_bar(stat='identity') + facet_wrap(~education) + geom_errorbar(aes(ymin=mean_score-se_score, ymax=mean_score+se_score))
+```
+
+
+# Exercise 4
+
+#### 4.1
+
+Create a figure that has boxplots of **score** (x-axis) by **region** (y-axis).  
+
+```{r}
+df %>%
+  ggplot(aes(score, region)) + geom_boxplot()
+```
+
+#### 4.2
+
+Group the data by region and add mean score by region to a new column **mean_score**. Do this with **`mutate()`** (not `summarise()`). 
+
+Reorder the levels of region based on mean_score.  
+
+**Hint**: Remember to ungroup after creating the mean_score variable.  
+
+```{r}
+df_grp <- df %>%
+  group_by(region) %>%
+  mutate(mean_score=mean(score)) %>%
+  ungroup()
+str(df_grp)
+df_grp %>%
+  mutate(region_reorder = fct_reorder(region, mean_score)) %>%
+  ggplot(aes(score, region_reorder)) + geom_boxplot()
+```
+
+
+# Exercise 5
+
+Using the data you modified in exercise 4.2, plot **mean scores** (x-axis) by **region** (y-axis) as points. The regions should be ordered by mean score.  
+
+Use `stat_summary()` to add error bars that represent standard errors of the mean.  
+
+**Hint**: Be careful which variable - mean_score or score - you're plotting in each of the geoms.  
+
+```{r}
+str(df_grp)
+df_grp %>%
+  mutate(region_reorder = fct_reorder(region, mean_score)) %>%
+  ggplot(aes(mean_score, region_reorder)) + stat_summary(geom = "point", fun.data = "mean_se") + stat_summary(geom = "linerange", fun.data = "mean_se")
+## Using **mean_score**, there is no variation as there is a single score for each region. Using **score** we would get error bars.
+
+```
+
+

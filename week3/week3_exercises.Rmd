@@ -1,0 +1,112 @@
+---
+title: "Week 3 Exercises"
+output: html_notebook
+---
+
+# Exercise 1
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+#### 1.1
+
+Read the *region_scores.csv* data into R. It should have 240 observations of 6 variables.  
+
+```{r}
+getwd()
+df <- readr::read_csv('region_scores.csv', locale = locale(encoding = "ISO-8859-1"))
+df %>%
+  distinct(region)
+```
+
+
+#### 1.2
+
+Cut the continuous variable **age** into a categorical variable **age_group** that has groups of width 10. Use ggplot2's cutting function.  
+
+Count observations by age group.
+
+```{r}
+df %>%
+  mutate(age_group = cut_width(age, 10))
+str(df)
+```
+
+
+# Exercise 2
+
+The chunk below is supposed to produce a plot but it has some errors.  
+
+The figure should be a scatter plot of **age** on the x-axis and **score** on the y-axis, with points coloured by **education level** (3 levels). It should also have three linear regression lines, one for each of the education levels.  
+
+Fix the code to produce the right figure.  
+
+What happens if you use `geom_jitter()` instead of `geom_point()`?  
+
+**Hint**: Examine the code bit by bit: start by plotting just the scatter plot without `geom_smooth()`, and add the regression lines last.  
+
+```{r}
+df %>% 
+  ggplot(age, score) + geom_point(color = education) + 
+  geom_smooth(method = "lm")
+
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Calculate the mean, standard deviation (sd), and number of observations (n) of **score by education and age group**. Also calculate the standard error of the mean (by using sd and n). Save these into a new data frame (or tibble) named edu_age_stats.  
+
+```{r}
+
+```
+
+#### 3.2
+
+Using edu_age_stats, plot a bar plot that has **age group** on the x-axis, **mean score** on the y-axis, and **education levels** in subplots (facets).  
+
+Use `geom_errorbar()` to add error bars that represent standard errors of the mean.  
+
+```{r}
+
+```
+
+
+# Exercise 4
+
+#### 4.1
+
+Create a figure that has boxplots of **score** (x-axis) by **region** (y-axis).  
+
+```{r}
+
+```
+
+#### 4.2
+
+Group the data by region and add mean score by region to a new column **mean_score**. Do this with **`mutate()`** (not `summarise()`). 
+
+Reorder the levels of region based on mean_score.  
+
+**Hint**: Remember to ungroup after creating the mean_score variable.  
+
+```{r}
+
+```
+
+
+# Exercise 5
+
+Using the data you modified in exercise 4.2, plot **mean scores** (x-axis) by **region** (y-axis) as points. The regions should be ordered by mean score.  
+
+Use `stat_summary()` to add error bars that represent standard errors of the mean.  
+
+**Hint**: Be careful which variable - mean_score or score - you're plotting in each of the geoms.  
+
+```{r}
+
+```
+
+
