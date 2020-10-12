@@ -1,0 +1,130 @@
+---
+title: "Week 4 Exercises"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+# Exercise 1
+
+Read the region_scores.csv data (make sure you have the data file in the right folder). 
+
+```{r}
+
+```
+
+
+Create a figure that shows the distributions (density plots or histograms) of **age** and **score** in separate subplots (facets). What do you need to do first?  
+
+In the figure, set individual x-axis limits for age and score by modifying the `scales` parameter within `facet_wrap()`.
+
+**Hint**: To make things simpler, you can begin by selecting only the variables you need here, i.e. age and score.  
+
+```{r}
+
+```
+
+
+# Exercise 2
+
+In this exercise, you will use the built-in iris dataset.  
+
+```{r}
+head(iris)
+```
+
+
+#### 2.1 
+
+Make the data into long format: gather all variables except species into new variables **var** (variable names) and **measure** (numerical values). You should end up with 600 rows and 3 columns (Species, var, and measure). Assign the result into `iris_long`.
+
+```{r}
+
+```
+
+#### 2.2
+
+In `iris_long`, separate **var** into two variables: **part** (Sepal/Petal values) and **dim** (Length/Width).  
+
+Then, spread the measurement values to new columns that get their names from **dim**. You must create row numbers by dim group before doing this.  
+
+You should now have 300 rows of variables Species, part, Length and Width (and row numbers). Assign the result into `iris_wide`.
+
+```{r}
+
+```
+
+
+#### 2.3
+
+Using `iris_wide`, plot a scatter plot of length on the x-axis and width on the y-axis. Colour the points by part.
+
+```{r}
+
+```
+
+-------------------
+# Working with your own data
+
+In exercises 3-5, you'll work with your own dataset. **If you don't have you own data, use the fss_learning.csv data (see description below).** 
+
+In these exercises, you are required to provide an overview of your data, using the tools we have learned so far. Because all datasets are different, the format of the exercises is quite open. You will get points for being thorough and trying your best - even if you didn't know how to write something in code, be explicit with what you were **trying** to achieve. When submitting the exercises, **please return both an .Rmd and an .html file and make sure that the HTML contains all the code and output that is needed for getting an impression of the data**; the document needs to be readable without having access to the full dataset.  
+
+
+#### the fss_learning data
+
+fss_learning.csv contains data from a longitudinal skill learning experiment. There are observations at multiple levels: a total of 18 **participants**, each completing 8 **sessions** which consist of 5 **runs** (trials) of a game-like driving task (i.e. 8*5 = 40 trials per participant). You can read more about the design [here](https://doi.org/10.3389/fpsyg.2019.01126).  
+
+In the data, there are trial-level measures related to performance (number of **collisions**, **duration** in seconds, **distance** travelled), as well as self-reports on a scale of 1-7 (variables fluency:comp3) collected after each trial or session. 
+
+# Exercise 3
+
+#### 3.1
+
+Import your data into R.  Check that you have the correct number of rows and columns, column names are in place, the encoding of characters looks OK, etc.   
+
+```{r}
+
+```
+
+
+#### 3.2
+
+Print the structure/glimpse/summary of the data. Outline briefly what kind of variables you have and if there are any missing or abnormal values. Make sure that each variable has the right class (numeric/character/factor etc).  
+
+```{r}
+
+```
+
+
+# Exercise 4
+
+Pick a few (2-5) variables of interest from your data (ideally, both categorical and numerical).  
+
+For **categorical variables**, count the observations in each category (or combination of categories). Are the frequencies balanced?  
+
+```{r}
+
+```
+
+For **numerical variables**, compute some summary statistics (e.g. min, max, mean, median, SD) over the whole dataset or for subgroups. What can you say about the distributions of these variables, or possible group-wise differences?  
+
+```{r}
+
+```
+
+
+# Exercise 5
+
+#### 5.1
+
+Describe if there's anything else you think should be done as "pre-processing" steps (e.g. recoding/grouping values, renaming variables, removing variables or mutating new ones, reshaping the data to long format, merging data frames together).
+
+
+#### 5.2
+
+Do you have an idea of what kind of relationships in your data you would like to visualise and for which variables? For example, would you like to depict variable distributions, the structure of multilevel data, summary statistics (e.g. means), or include model fits or predictions?
+
