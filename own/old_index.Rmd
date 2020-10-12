@@ -1,0 +1,93 @@
+---
+title: "datavis-R home"
+author: "Henrik Husberg"
+date: "9/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Weekly exercises
+
+Parts of the excercises Will be published after the deadlines :)
+
+### Exercise Week 1
+
+First exercises were very basic stuff, like this:
+
+```{r}
+# Exercises, week 1
+# Type your code below the comments. You can add your own comments, too.
+# Return this file to Moodle ('firstname_lastname_week1.R').
+
+## Henrik: My comments will look like this.
+
+# Exercise 1: 
+# Create a vector named my_vector. It should have 7 numeric elements.
+
+my_vector <- c(4, 6, 9, 2, 5, 3, 1)
+
+# Print your vector.
+
+my_vector
+
+# Calculate the minimum, maximum, and median values of your vector.
+
+summary(my_vector)
+median(my_vector)
+max(my_vector)
+min(my_vector)
+```
+
+It's always good to repeat the basics, so it was fun doing these even if it only took me a few minutes. I know I have some bad habits in R, so it's good to try to correct those when doing easy exercises. I'll try to remember to do it for the rest of the course as well, because I know I fall back on bad habits when the assignments get harder and I have to focus on getting the code to run...
+
+### Exercise Week 2
+
+This week we got to plot. And I got to know the word "tibble", which I've never used before. We also did this weeks assignment in Rmarkdown, which makes it easier to demonstrate here. 
+We used libraries tidyverse and ggplot2.
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+First, we used code supplied by the lecturers to generate some data.
+
+```{r include = F}
+# this chunk generates the data, and you can ignore it
+set.seed(1)
+df  <- tibble(group = sample(c(rep(1:2, each=30))),
+              gender = sample(c(rep(c('M', 'F'), 28), rep(999,4))),
+              score1 = rnorm(60, 18, 2),
+              score2 = as.character(runif(60, 0.7, 1.1)*score1))
+  
+```
+Then we had to correct some errors in the data (I'll leave it invisible so as not to share too much of the course material.)
+```{r include = FALSE}
+##Alt: df <- transform(df, score2 = as.numeric(score2))
+df <- df %>%
+  mutate(score2 = as.numeric(score2)) %>%
+  mutate(gender = na_if(gender, 999)) %>%
+  mutate(gender = as.factor(gender)) 
+  
+summary(df)
+str(df)
+```
+Here's an example of the exercises.
+
+We counted.
+```{r}
+df %>%
+  count(group, gender) %>%
+  arrange(n)
+
+```
+
+And plotted.
+```{r}
+df %>%
+  ggplot(aes(x=score1, y=score2)) + geom_point()
+```
+
+I didn't get full points for this exercise, you can probably spot the error above. Though it didn't affect the outputs...
