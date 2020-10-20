@@ -1,6 +1,6 @@
 ---
 title: "Week 4 Exercises"
-output: html_notebook
+output: html_document
 ---
 
 ```{r}
@@ -121,6 +121,8 @@ Import your data into R.  Check that you have the correct number of rows and col
 # and half the participants data was never submitted by the school. The plan is to simulate data in order to 
 # test analyses. We are currently collecting more data in order to be able to better simulate data.
 library(naniar)
+getwd()
+setwd("C:/Users/hehusb/Documents/GitHub/datavis-R/week4")
 fokus_p <- readr::read_csv2("fokus_p_dbr_wide_2.csv")
 
 ```
