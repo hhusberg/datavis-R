@@ -1,6 +1,6 @@
 ---
 title: "Week 4 Exercises"
-output: html_notebook
+output: html_document
 ---
 
 ```{r}
@@ -43,7 +43,7 @@ df_2_l %>%
   geom_histogram(position = "identity", alpha = .5, binwidth = 1) +
   facet_wrap(~key, scales = "free")
 
-``
+```
 
 
 # Exercise 2
