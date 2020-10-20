@@ -1,0 +1,102 @@
+---
+title: "Week 5 Exercises"
+output: html_notebook
+---
+
+Read the file timeuse_tidy.rds with `readRDS()`. The file contains the dataset that we tidied in the exercise session: records of daily time use from participants over multiple days. Note that since the data has been stored as rds (R-specific format), column types and factor levels are as we left them, and don't need to be re-corrected.
+
+```{r}
+
+```
+
+
+# Exercise 1
+
+#### 1.1
+
+Create a new variable that contains combined activity classes: "Work or school" (Work, Business, Education), "Free time" (Shopping, Social / Leisure, Home, Vacation), and "Other".  
+
+Calculate the mean time spent on each of the combined activity classes, grouped by **weekday, participant ID, and occ_full_time**.  
+
+```{r}
+  
+```
+
+#### 1.2 
+
+Visualise the means you calculated.
+
+```{r}
+
+```
+
+
+# Exercise 2
+
+#### 2.1
+
+What is computed in the code chunk below - what do the numbers tell you?  
+
+Can you think of another way to calculate the same thing?  
+
+```{r}
+
+tidytime %>%
+  distinct(indivID, date) %>%
+  arrange(date) %>%
+  count(date)
+
+```
+
+#### 2.2
+
+Plot the numbers from above (use points, lines, or whatever you think is suitable).  
+
+```{r}
+
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Count the **total number of participants** in the data.  
+
+```{r}
+  
+```
+
+#### 3.2
+
+For each participant, count the **number of separate days** that they recorded their time use on.  
+
+```{r}
+  
+```
+
+
+# Exercise 4
+
+Explain step by step what happens in the code chunk below, and what the final figure represents.
+
+```{r fig.height=20, fig.width=10}
+tidytime %>%
+  group_by(indivID) %>%
+  mutate(start_date = min(date)) %>%
+  ungroup %>%
+  mutate(indivID = factor(indivID),
+         indivID = fct_reorder(indivID, start_date) %>% fct_rev()) %>%
+  ggplot(aes(date, indivID, colour = month(start_date, label = T))) + 
+  geom_line() + 
+  geom_point(size=.5, alpha=.1) +
+  theme_bw() + 
+  scale_y_discrete(breaks = "none") +
+  labs(x = "Date", y = "", colour = "Starting month")
+
+```
+
+
+
+
+

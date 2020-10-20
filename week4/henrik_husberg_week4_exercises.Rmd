@@ -1,6 +1,6 @@
 ---
 title: "Week 4 Exercises"
-output: html_notebook
+output: html_document
 ---
 
 ```{r}

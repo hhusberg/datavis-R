@@ -1,0 +1,91 @@
+---
+title: "Week 6 Exercises"
+output: html_notebook
+---
+
+# Exercise 1
+
+The data frames df_w and df_f represent repeated measures data from 60 participants. Variables F1-F3 and W1-W3 are "sub-variables" that will be used to make two composite variables F_total and W_total, respectively. 
+
+```{r include=F}
+# simulating data
+set.seed(1)
+df_f <- data.frame(id = rep(1:60, each = 2) %>% as.character,
+                 session = rep(2:1, 60),
+                 group = rep(1:2, each = 60),
+                 F1 = sample.int(4, 120, replace = T) - 1,
+                 F2 = sample.int(4, 120, replace = T) - 1,
+                 F3 = (sample.int(4, 120, replace = T) - 1)) %>%
+  mutate(F3 = F3*(session-1), F2 = F2*(group-1)*(2-session)) %>%
+  mutate(group = factor(group))
+
+df_w <- data.frame(id = rep(1:60, each = 2) %>% as.character,
+                 session = rep(1:2, 60) %>% factor,
+                 group = rep(1:2, each = 60) %>% factor,
+                 W1 = sample.int(4, 120, replace = T) - 1,
+                 W2 = sample.int(4, 120, replace = T) - 1,
+                 W3 = sample.int(4, 120, replace = T) - 1)
+```
+
+#### 1.1
+
+Merge the two data frames together.
+
+```{r}
+
+```
+
+#### 1.2
+
+Using the merged data frame, create the **composite variables F_total and W_total, which are the sums of F1-F3 and W1-W3, respectively** (i.e. their values can range from 0 to 9).
+
+```{r}
+
+```
+
+
+# Exercise 2
+
+#### 2.1
+
+Visualise the distributions of F_total and W_total for the two groups and measurement sessions (for example as boxplots). 
+
+```{r}
+
+```
+
+#### 2.2
+
+Fit a linear regression model with F_total as the DV, and session and group as predictors.  
+
+```{r}
+
+```
+
+#### 2.3
+
+Look at the means of F_total by group and session. How are they linked to the linear regression model coefficients?
+
+```{r}
+
+```
+
+
+# Exercise 3
+
+Visualise the [anscombe dataset](https://rdrr.io/r/datasets/anscombe.html) using ggplot2.
+
+```{r}
+
+```
+
+
+# Exercise 4
+
+Prepare a **separate R Notebook/Markdown document**, which will be the first draft of your final assignment with your own data. In the draft, include the following:  
+
+1. Outline the study design, your research question, DV(s), IV(s)  
+2. Data wrangling: start from reading in the raw data and show all steps  
+3. Plot your main result(s)    
+
+Even if you had already completed some of these steps before, please include all of them in your document. **NOTE: Return either a readable HTML document (.html or .nb.html), or an .Rmd file along with your data, to make it possible for us to review your work!** Make the document as professional-looking as possible (you can, of course, include your comments/questions in the draft). You will get feedback on the draft, based on which you can then make the final version. The final document should be a comprehensive report of your data wrangling process and results.  

@@ -1,0 +1,331 @@
+---
+title: "Plotting time series"
+output: html_notebook
+---
+
+```{r setup}
+library(cowplot)
+library(tidyverse)
+library(lubridate)
+```
+
+
+# Apollo data
+
+In these exercises, we will use the [Apollo time use dataset](http://www.apollochoicemodelling.com/files/apollo_timeUseData_dictionary.pdf) (slightly modified for our purposes), which has 2,826 observations from 447 participants. This time series has records of daily time spent (in minutes) on various activities, such as working, shopping, or travelling (variables starting with "t_a"; see the link above for description). Other variables include participant ID, date, age, and dummy variables for gender (1 = female, 0 = male) and work status (1 = full time, 0 = other).
+
+```{r message=F}
+timeuse <- read_csv("timeuse.csv") %>% as_tibble()
+
+glimpse(timeuse)
+
+```
+
+First, let's take care of the column types and then convert to longer format. We will also subset the data to contain the year 2016 only, and assign the tidied dataset to **tidytime**.  
+
+#### Working with dates in lubridate
+
+Values can be turned into dates (or datetimes) easily with functions such as ymd(), dmy(), mdy(), or ymd_hms(), dmy_hms(), where y = year, m = month, d = day (and h = hours, m = minutes, s = seconds). 
+
+```{r}
+# some examples
+
+mydate <- dmy(c(121020, 131020))
+
+dmy(c(121020, 13102020))
+
+dmy(c(121020, "13102020"))
+
+dmy(c(121020, "13102020", "date"))
+
+ymd_hms("20201012151820")
+
+```
+
+
+```{r}
+timeuse <- timeuse %>%
+  mutate(indivID = as.character(indivID),
+         date = ymd(date),
+         female = factor(female),
+         occ_full_time = factor(occ_full_time)) 
+
+timeuse_long <- timeuse %>%
+  gather(activity_class, time_spent, starts_with("t_a")) 
+
+tidytime <- timeuse_long %>%
+  filter(year(date) == 2016) %>%
+  arrange(indivID, date, activity_class)
+
+
+```
+
+Let's also recode the activity variable to have more informative values.   
+
+(!!! is used to *evaluate a list of expressions* - sounds tricky but here you can think of it as "unwrapping" the vector of recoding keys)
+
+```{r}
+act_key <- c(t_a01 = "lifts", t_a02 = "work", t_a03 = "education", t_a04 = "shopping", t_a05 = "business", t_a06 = "petrol", t_a07 = "social / leisure", t_a08 = "vacation", t_a09 = "exercise", t_a10 = "home", t_a11 = "travel", t_a12 = "non-allocated")
+
+tidytime <- tidytime %>%
+  mutate(activity_class = recode(activity_class, !!!act_key) %>% factor)
+
+# this works:
+tidytime %>%
+  mutate(activity_class = recode(activity_class, t_a01 = "lifts") %>% factor)
+
+# this doesn't:
+tidytime %>%
+  mutate(activity_class = recode(activity_class, c(t_a01 = "lifts")) %>% factor)
+
+tidytime
+```
+
+#### Aggregating multilevel data
+
+Let's summarise the data frame **from a participant-level time series to an aggregated time series** (mean time spent per activity per day).  
+
+```{r message=F}
+tidytime_agg <- tidytime %>%
+  group_by(date, activity_class) %>% 
+  summarise(time_spent = mean(time_spent), # create a variable of the same name
+            n = n()) %>%
+  ungroup()
+
+tidytime_agg
+```
+
+Now we can plot the average time spent in each activity type as a time series.  
+
+Note how the date labels are modified with **scale_x_date**!
+
+```{r fig.width=12, fig.height=8}
+tidytime_agg %>% 
+  ggplot(aes(date, time_spent, color = activity_class)) + 
+  geom_line(size = 1, alpha = .4) +
+  scale_x_date(date_breaks = "1 week", date_labels = "%Y (%W)", date_minor_breaks = "1 day") + # make axis ticks for weeks and minor breaks for days; labels show year and week
+  labs(x = "Date", y = "Average time spent (minutes)", colour = "Activity type") + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+```
+
+There seems to be some periodicity in the data. Let's have a look at the data on a weekly basis. We'll use weekday (Mon-Sun) on the x-axis and make subplots for activity types, plotting weeks as separate lines. Before that, let's make a few more modifications.   
+
+**Weekday** is computed with the `wday()` function, which returns the number (`label = F`) or name (`label = T`; ordered factor) of the weekday. The week starts by default on Sunday, but we're setting it to start on Monday with week_start = 1.  
+
+**Week number** is computed by simply extracting the week from date with `week(date)`.   
+
+We modify the **activity classes** to start with uppercase letters (`str_to_title()`), and move the "non-allocated" category to the last level (see where it is in the plot).  
+
+
+```{r}
+tidytime_agg <- tidytime_agg %>%
+  mutate(weekday = wday(date, label = T, abbr = T, week_start = 1, locale = "English"), 
+         week_number = week(date)) %>% 
+  mutate(activity_class = str_to_title(activity_class), # modify activity class
+         activity_class = fct_relevel(activity_class, "Non-Allocated", after = Inf)) # move "non-allocated" to last place
+
+tidytime_agg
+```
+
+#### Recoding with if_else and case_when
+
+Let's create a **weekend** variable denoting whether the date is in a weekend. This can be done in multiple ways; here, we'll go through `if_else()` and `case_when()`. Since if_else only has room for one condition, it can be used with simple recoding. On the other hand, case_when can handle multiple conditions and values (note that it is order-dependent; the conditions should be listed from the most specific to the most general). In fact, case_when is like using successive if_else statements.  
+
+```{r}
+# method 1: if_else
+tidytime_agg %>%
+  mutate(is_weekend = if_else(weekday %in% c("Sat", "Sun"), 1, 0)) # if_else(condition, true values, false values)
+
+# method 2: case_when  
+tidytime_agg %>%
+  mutate(is_weekend = case_when(weekday %in% c("Sat", "Sun") ~ 1, # case_when(condition1 ~ true value, ...)
+                                weekday %in% c("Mon", "Tue", "Wed", "Thu") ~ 0, # note that Fri is not listed
+                                TRUE ~ 0)) # this means "in all other cases: is_weekend = 0"
+# or, in this case, shorter:
+tidytime_agg %>%
+  mutate(is_weekend = case_when(weekday %in% c("Sat", "Sun") ~ 1,
+                                TRUE ~ 0))  %>%
+  mutate(is_weekend = factor(is_weekend))
+  
+```
+
+#### Time spent on activities per weekday
+
+**Some adjustments to the figure**:  
+
+- Because the scale of time spent varies greatly between activities, we set individual y-axis scales for the subplots (see the difference if you remove it!)   
+- We will use the same colour coding as in the above plot, but since the activity classes are shown as facet labels, we can remove the colour legend
+
+```{r fig.width=12, fig.height=8}
+
+tidytime_agg %>%
+  ggplot(aes(weekday, time_spent, color = activity_class, group = week_number)) + 
+  geom_line(size=1, alpha = .1) +
+  geom_point(alpha = .6) +
+  facet_wrap(~activity_class, scales = "free_y") + # let y-axis scale vary between facets
+  labs(x = "Weekday", y = "Average time spent (minutes)", colour = "Activity type") + 
+  theme_bw() +
+  theme(legend.position = "none") # remove the legend
+```
+
+We can also aggregate the weeks together to get **average time spent on an activity broken down by weekday**. How exactly should this be calculated?   
+
+Think of what is shown in the next two plots: Figure 1 shows mean times per weekday calculated from **all records** (separate rows for participants * dates), whereas Figure 2 shows means computed from the **date-level data** (i.e. each day that has any observations has an equal weight). This is why the plots look different!  
+
+(Function `plot_grid()` from the cowplot package is used to print plots side-by-side.)
+
+```{r message=F, fig.width=10, fig.height=8}
+tidytime <- tidytime %>%
+  mutate(weekday = wday(date, label = T, abbr = T, week_start = 1, locale = "English"),
+         week_number = week(date)) %>% 
+  mutate(activity_class = str_to_title(activity_class), # modify activity class
+         activity_class = fct_relevel(activity_class, "Non-Allocated", after = Inf)) 
+
+fig1 <- tidytime %>% # start with "raw" data
+  group_by(weekday, activity_class) %>%
+  summarise(time_spent = mean(time_spent)) %>%
+  ungroup %>%
+  ggplot(aes(weekday, time_spent, color = activity_class, group=1)) + geom_line(size=1) + 
+  facet_wrap(~activity_class, scales = "free_y") +
+  labs(x = "Weekday", y = "Average time spent (minutes)", colour = "Activity type", title = "Figure 1",
+       subtitle = "Mean calculated from all values") + theme_bw() +
+  theme(legend.position = "none")
+
+
+fig2 <- tidytime_agg %>% # start with aggregated data
+  group_by(weekday, activity_class) %>%
+  summarise(time_spent = mean(time_spent)) %>%
+  ungroup %>% 
+  ggplot(aes(weekday, time_spent, color = activity_class, group=1)) + geom_line(size=1) + 
+  facet_wrap(~activity_class, scales = "free_y") +
+  labs(x = "Weekday", y = "Average time spent (minutes)", colour = "Activity type", title = "Figure 2",
+       subtitle = "Mean calculated from daily means") + theme_bw() +
+  theme(legend.position = "none")
+
+cowplot::plot_grid(fig1, fig2, ncol = 1)
+
+```
+
+This is illustrated in the below example.  
+
+```{r}
+day1_small <- c(100, 10) # n = 2 with "outlier"
+day2 <- c(10, 14, 18, 14, 20) # n = 5
+
+paste("Mean of all values (small sample with outlier):", mean(c(day1_small, day2)) %>% round(1)) # smaller
+
+mean_day1_small = mean(day1_small) # outlier affects day-wise mean
+mean_day2 = mean(day2)
+
+paste("Mean of daily means (small sample with outlier):", mean(c(mean_day1_small, mean_day2)) %>% round(1)) # greater
+
+day1 <- c(100, 12, 15, 13, 16) # n = 5 with "outlier"
+day2 <- c(10, 14, 18, 14, 20) # n = 5
+
+paste("Mean of all values (balanced samples with outlier):", mean(c(day1, day2)) %>% round(1))
+
+mean_day1 = mean(day1)
+mean_day2 = mean(day2)
+
+paste("Mean of daily means (balanced samples with outlier):", mean(c(mean_day1, mean_day2)) %>% round(1))
+```
+
+
+#### Visualising skewed data
+
+Datasets like this are usually hevily skewed (see density plots below). It might be worth using another aggregate measure instead of mean, e.g. median, and/or defining a threshold for filtering outliers.  
+
+```{r message=F}
+tidytime %>%
+  ggplot(aes(time_spent)) + geom_density() +
+  labs(x = "Time spent (minutes)", title = "Distribution of all records") +
+  theme_bw()
+
+tidytime_agg %>%
+  ggplot(aes(time_spent)) + geom_density() + 
+  labs(x = "Time spent (minutes)", title = "Distribution of daily averages") +
+  theme_bw()
+
+# let's make aggregates based on median
+tidytime_agg_md <- tidytime %>%
+  group_by(date, activity_class) %>% 
+  summarise(time_spent = median(time_spent), # create a variable of the same name
+            n = n()) %>%
+  ungroup() %>%
+  mutate(weekday = wday(date, label = T, abbr = T, week_start = 1, locale = "English"), 
+         week_number = week(date)) %>% 
+  mutate(activity_class = str_to_title(activity_class), 
+         activity_class = fct_relevel(activity_class, "Non-Allocated", after = Inf)) 
+
+tidytime_agg_md %>%
+  ggplot(aes(time_spent)) + geom_density() + 
+  labs(x = "Time spent (minutes)", title = "Distribution of daily medians") +
+  theme_bw()
+
+```
+
+Let's plot median times spent per weekday:
+
+```{r message = F, fig.width= 10}
+tidytime %>%
+  group_by(weekday, activity_class) %>%
+  summarise(time_spent = median(time_spent)) %>%
+  ungroup %>% 
+  ggplot(aes(weekday, time_spent, color = activity_class, group=1)) + geom_line(size=1) + 
+  facet_wrap(~activity_class, scales = "free_y") +
+  labs(x = "Weekday", y = "Median time spent (minutes)", colour = "Activity type") + theme_bw() +
+  theme(legend.position = "none")
+```
+
+And it's even better to show the whole distribution:
+
+```{r fig.width=10}
+tidytime %>%
+  ggplot(aes(weekday, time_spent, color = activity_class)) + 
+  geom_violin() + 
+  stat_summary(aes(group=1), geom = "line", fun = "median", size = 1) +
+  stat_summary(aes(group=1), geom = "line", fun = "mean", colour = "black", alpha = .7) +
+  facet_wrap(~activity_class, scales = "free_y") +
+  labs(x = "Weekday", y = "Median time spent (minutes)", colour = "Activity type") + theme_bw() +
+  theme(legend.position = "none")
+```
+
+#### Human time
+
+There is another common caveat in human-reported times. Let's remove full hours from the time_spent variable to get the remaining minutes (e.g. 1424 min -> 23 hours 44 min). Then, we calculate frequencies of the minutes and plot them.  
+
+```{r fig.width = 10}
+highlight_times <- seq(5, 60, by = 5)
+
+tidytime %>%
+  mutate(hours_spent = hour(seconds_to_period(time_spent*60)),
+         minutes = minute(seconds_to_period(time_spent*60))) %>%
+  count(minutes) %>%
+  filter(minutes > 0) %>%
+  mutate(highlight_count = if_else(minutes %in% highlight_times, n, NA_integer_)) %>% # if highlighted, value = count
+  ggplot(aes(minutes, n)) + # grey bars
+  geom_col() +
+  geom_col(aes(minutes, highlight_count, fill = "Peaks")) + # when would you put fill outside aesthetics?
+  geom_smooth(aes(color = "Regression line"), se=F, method = "lm")  + 
+  scale_color_manual(name = "", values = c("Regression line" = "black")) +
+  scale_fill_manual(name = "", values = c("Peaks" = "darkred")) +
+  scale_x_continuous(breaks = highlight_times) +
+  geom_text(aes(label = highlight_count), vjust=-0.25) + # vjust: vertical adjustment to avoid overlap with bars
+  theme_bw() +
+  labs(x = "Minutes", y = "Count", title = "Distribution of minutes in self-reports")
+
+```
+
+A few things to note about the plot:  
+
+- Peaks are highlighted by plotting another `geom_col()` on top of the first one, with only a subset of the counts (defined in highlight_times)   
+- **n** and **highlight_count** share the x-axis (minutes), which allows them to be plotted on the same figure neatly; the highlighted counts have missing values for all minutes except highlighted ones ("Removed 48 rows containing missing values")  
+- Colour/fill *names* (for legend) of the regression line and the red bars are defined within the geoms' aesthetics  
+- Colour/fill values (black, dark red) matching the names are defined in **scale_color_manual** and **scale_fill_manual**  
+- The peaks are labelled with geom_text, getting the labels from the y-values (counts)  
+- The order of the geoms matters: grey bars are in the back layer, followed by the regression line and the red bars. You can change the order of geoms or transparency of the geoms (alpha)   
+
+
+

@@ -1,0 +1,286 @@
+---
+title: "dataViz_lecture5"
+author: "Ben Cowley"
+date: "07/10/2020"
+output: 
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '4'
+---
+# Data Viz Lecture 5
+
+### Importing data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# attach packages
+library(tidyverse)
+library(here)
+
+# set working directory - can be convenient if reading multiple datasets from files, 
+# to put them in a folder 'data' and uncomment the next line
+# knitr::opts_knit$set(root.dir = normalizePath(file.path(here(), 'data')))
+# set output directory if saving analysis figures
+# odir <- file.path(here(), 'figures')
+# dir.create(odir, showWarnings = FALSE)
+```
+
+
+## Simple time series
+
+Let's look at fundamental time series plots, using ggplot2's 'economics' dataset, a data frame with 574 rows and 6 variables:
+
+__date__ - Month of data collection
+
+__pce__ - personal consumption expenditures, in billions of dollars
+
+__pop__ - total population, in thousands
+
+__psavert__ - personal savings rate
+
+__uempmed__ - median duration of unemployment, in weeks
+
+__unemploy__ - number of unemployed in thousands
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+head(economics)
+class(economics$pop)
+class(economics$date)
+
+base_date_str <- c("1980-06-29")
+base_date <- as.Date(base_date_str)
+
+library(lubridate)
+lube_date <- ymd(base_date_str)
+
+# Is the outcome of base R and lubridate equivalent?
+base_date == lube_date
+```
+
+### Plot a single simple time series - what can we do with it?
+
+```{r}
+# Basic line plot for num x num time series
+ggplot(data = economics, aes(x = date, y = pop))+
+  geom_line()
+```
+
+```{r}
+# adjust the theme to reduce visual background noise
+theme_set(theme_minimal())
+
+# play with color and line thickness
+ggplot(data = economics, aes(x = date, y = pop))+
+  geom_line(color = "#00AFBB", size = 2)
+```
+
+```{r}
+# adjust the line itself to convey additional diensions of information
+ggplot(data = economics, aes(x = date, y = pop)) +
+  geom_line(aes(size = unemploy/pop), color = "#FC4E07")
+```
+
+```{r}
+# Focus on last 10 years only -> Plot a subset of the data
+ss <- subset(economics, date > ymd("2006-1-1"))
+ggplot(data = ss, aes(x = date, y = pop)) + 
+  geom_line(aes(size = unemploy/pop), color = "#FC4E07") +
+  labs(size = "unemployed /\npopulation")
+```
+
+```{r}
+# Focus on post-crash years only -> Plot a subset of the data
+ss <- subset(economics, date > ymd("2009-1-1") & date < ymd("2011-1-1"))
+ggplot(data = ss, aes(x = date, y = pop)) + 
+  geom_line(aes(size = unemploy/pop), color = "#FC4E07") +
+  labs(size = "unemployed /\npopulation")
+```
+
+```{r}
+# Focus on post-crash years only -> Plot a subset of the data
+ss <- subset(economics, date > ymd("2009-1-1") & date < ymd("2011-1-1"))
+ggplot(data = ss, aes(x = date, y = pop)) + 
+  geom_line(aes(color = uempmed, size = unemploy/pop)) +
+  labs(color = "Med. weeks\nunemployed", size = "unemployed /\npopulation")
+```
+
+## Numerical & Categorical simple series
+
+Let's see some examples of types of series.
+
+### Numerical time, Numerical values - heart rate
+
+- To add colibri, go to https://github.com/bwrc/colibri and follow instructions in the README
+- If there is a problem installing devtools in RStudio, try to do it in R. To start R from the command line:
+  - Linux, Mac = $ R
+  - Windows = find your path to R.exe, e.g. C:\Program Files\R\R-3.6.3\bin>R.exe
+
+```{r, warning=FALSE, message=FALSE}
+library(colibri)
+```
+
+```{r}
+# Add the provided data file to the same folder as the Rmd document
+fname <- "DCVRa_D_both_0001-ECG-30s.edf"
+## read the data
+recording <- read.data.edf(fname)
+recording$signal$ECG$data <- -recording$signal$ECG$data  ## need to flip the polarity
+
+
+## detect the R-peaks
+recording <- tryCatch({
+  ibi_from_ecg(recording)
+}, error = function(e){ 
+  print(paste(i, ":: FAIL ::", fname, ":: MYSTERIOUS ERROR IN ibi_from_ecg()!!"))
+  return(e)
+})
+if(inherits(recording, "error")) next
+
+
+## remove artifacts
+ibi_orig <- recording$signal$ibi
+
+ind.artifact <- detect_artifacts_xu(recording$signal$ibi$data)
+if (length(ind.artifact) > 0)
+{
+  recording$signal$ibi$data <- recording$signal$ibi$data[-ind.artifact]
+  recording$signal$ibi$t <- recording$signal$ibi$t[-ind.artifact]
+}
+
+
+## plot ecg with R-peaks
+par(mfrow = c(3, 1), mai = c(0.3, 1, 0.1, 0.1), mgp = c(1.4, 0.5, 0))
+plot(recording$signal$ECG$t, recording$signal$ECG$data, type = "l", col = "blue", lwd = 1
+     , xlab = NA, ylab = "uV")
+points(recording$signal$ibi.amp$t,recording$signal$ibi.amp$data, type = "p", col = "red", cex = 2, pch = 20)
+plot(ibi_orig$t, ibi_orig$data, type = "l", col = "red", lwd = 1, xlab = NA, ylab = "original IBI")
+plot(recording$signal$ibi$t, recording$signal$ibi$data, type = "l", col = "green", lwd = 1
+     , xlab = "Time (sec)", ylab = "de-artefacted IBI")
+```
+
+### Numerical time, Categorical values -  governing parties
+```{r}
+head(presidential)
+
+ggplot(data = presidential, aes(x = start, y = party)) + 
+  geom_point(aes(color = party))
+```
+
+```{r}
+yrng <- range(economics$unemploy)
+ggplot(economics, aes(x = date, y = unemploy)) + 
+  geom_line() + 
+  geom_rect(aes(NULL, NULL, xmin = start, xmax = end, fill = party),
+                   ymin = yrng[1], ymax = yrng[2], data = presidential) + 
+  scale_fill_manual(values = alpha(c("blue", "red"), .3))
+```
+
+### Categorical time, Numerical values - opening hours
+```{r}
+alko <- as.data.frame(cbind(matrix(t(rep(9:21, 5)), ncol = 5), c(9:18, rep(NA, 3)), NA))
+names(alko) <- c("Ma", "Ti", "Ke", "To", "Pe", "La", "Su")
+df <- pivot_longer(alko, 1:7, names_to = "day")
+df$day <- factor(df$day,levels = c("Ma", "Ti", "Ke", "To", "Pe", "La", "Su"))
+
+ggplot(data = df, aes(x = day, y = value)) +
+  geom_point() +
+  ylab("Alko opening hours")
+```
+### Categorical time, Categorical values
+
+_A special prize will be given to the person who comes up with the best time-series visualisation of Categorical time, Categorical values data!_
+
+
+## Multiple simple series
+
+Let's see how to plot more than one line per figure:
+
+```{r}
+df <- economics %>%
+  select(date, psavert, uempmed) %>%
+  gather(key = "variable", value = "value", -date)
+head(df, 3)
+```
+
+```{r}
+# Multiple line plot
+ggplot(df, aes(x = date, y = value)) + 
+  geom_line(aes(color = variable), size = 1) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800")) +
+  theme_minimal()
+```
+
+```{r}
+# Area plot
+p <- ggplot(df, aes(x = date, y = value)) + 
+  geom_area(aes(color = variable, fill = variable), 
+            alpha = 0.5, position = position_dodge(0.8)) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800")) +
+  scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
+  theme_minimal()
+p
+```
+
+```{r}
+# Format : month/year
+p + scale_x_date(date_labels = "%b/%Y")
+```
+
+```{r}
+# Fitting curves per group
+p + stat_smooth(aes(group = variable),
+  color = "#FC4E07", fill = "#FC4E07",
+  method = "loess"
+  )
+```
+
+
+## Characteristics of time series
+
+Let's see how to decompose :
+
+```{r}
+# Here's a stationary process
+white_noise<-rnorm(100,0,1)
+plot(white_noise,type='l',xlab='Time',ylab=expression('x'[t]),main='White Noise Process')
+```
+
+
+```{r}
+# Here's a trend-stationary process
+white_noise<-rnorm(100,0,40)
+trend<-3*(1:100)
+x_t<-trend+white_noise
+plot(x_t,type='l',xlab='Time',ylab=expression('x'[t]),main='Trend Stationary Process')
+```
+
+Assuming that we know that trend stationarity holds, we do a three step process:
+
+1. Fit a model M_t to x_t
+2. Subtract M_t from x_t, obtaining y_t = x_t - M_t
+3. Model y_t (for inference, forecasting, etc)
+
+```{r}
+# Let's detrend and plot
+mu_t<-lm(x_t~c(1:100))
+y_t<-x_t-mu_t[['fitted.values']]
+plot(y_t,type='l',xlab='Time',ylab=expression('Fitted y'[t]),main='Detrended')
+```
+
+
+## Final example
+
+Unique and uniform time series from non-unique, non-uniform generating processes.
+
+```{r}
+kings <- scan("http://robjhyndman.com/tsdldata/misc/kings.dat",skip=3)
+kings.ts <- ts(kings)
+class(kings.ts)
+kings.ts
+```
+
+```{r}
+plot.ts(kings.ts)
+```
