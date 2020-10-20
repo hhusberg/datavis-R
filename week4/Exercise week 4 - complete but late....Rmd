@@ -1,0 +1,182 @@
+---
+title: "Week 4 Exercises"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+# Exercise 1
+
+Read the region_scores.csv data (make sure you have the data file in the right folder). 
+
+```{r}
+getwd()
+df <- readr::read_csv("region_scores.csv", locale = locale(encoding = "ISO-8859-1"))
+str(df)
+```
+
+
+Create a figure that shows the distributions (density plots or histograms) of **age** and **score** in separate subplots (facets). What do you need to do first?  
+
+In the figure, set individual x-axis limits for age and score by modifying the `scales` parameter within `facet_wrap()`.
+
+**Hint**: To make things simpler, you can begin by selecting only the variables you need here, i.e. age and score.  
+
+```{r}
+
+## I'll just use the two variables as hinted...
+df_2 <- df %>% select(age, score)
+df_2
+
+## First we need to convert the data to long format so we can use facet_wrap
+df_2_l <- df_2 %>%
+  gather()
+
+str(df_2_l)
+
+## Then the plots, with free scales.
+df_2_l %>%
+  ggplot(aes(value)) +
+  geom_histogram(position = "identity", alpha = .5, binwidth = 1) +
+  facet_wrap(~key, scales = "free")
+
+``
+
+
+# Exercise 2
+
+In this exercise, you will use the built-in iris dataset.  
+
+```{r}
+head(iris)
+```
+
+
+#### 2.1 
+
+Make the data into long format: gather all variables except species into new variables **var** (variable names) and **measure** (numerical values). You should end up with 600 rows and 3 columns (Species, var, and measure). Assign the result into `iris_long`.
+
+```{r}
+iris_long <- iris %>%
+  gather(var, measure, -Species)
+
+```
+
+#### 2.2
+
+In `iris_long`, separate **var** into two variables: **part** (Sepal/Petal values) and **dim** (Length/Width).  
+
+Then, spread the measurement values to new columns that get their names from **dim**. You must create row numbers by dim group before doing this.  
+
+You should now have 300 rows of variables Species, part, Length and Width (and row numbers). Assign the result into `iris_wide`.
+
+```{r}
+iris_long
+
+iris_wide <- iris_long %>%
+  separate(var, into = c('part', 'dim'), convert = TRUE) %>%
+  group_by(dim) %>%
+  mutate(row = row_number()) %>%
+  ungroup %>%
+  spread(dim, measure)
+```
+
+
+#### 2.3
+
+Using `iris_wide`, plot a scatter plot of length on the x-axis and width on the y-axis. Colour the points by part.
+
+```{r}
+iris_wide %>%
+  ggplot(aes(Length, Width, colour = part)) +
+  geom_point()
+
+```
+
+-------------------
+# Working with your own data
+
+In exercises 3-5, you'll work with your own dataset. **If you don't have you own data, use the fss_learning.csv data (see description below).** 
+
+In these exercises, you are required to provide an overview of your data, using the tools we have learned so far. Because all datasets are different, the format of the exercises is quite open. You will get points for being thorough and trying your best - even if you didn't know how to write something in code, be explicit with what you were **trying** to achieve. When submitting the exercises, **please return both an .Rmd and an .html file and make sure that the HTML contains all the code and output that is needed for getting an impression of the data**; the document needs to be readable without having access to the full dataset.  
+
+
+#### the fss_learning data
+
+fss_learning.csv contains data from a longitudinal skill learning experiment. There are observations at multiple levels: a total of 18 **participants**, each completing 8 **sessions** which consist of 5 **runs** (trials) of a game-like driving task (i.e. 8*5 = 40 trials per participant). You can read more about the design [here](https://doi.org/10.3389/fpsyg.2019.01126).  
+
+In the data, there are trial-level measures related to performance (number of **collisions**, **duration** in seconds, **distance** travelled), as well as self-reports on a scale of 1-7 (variables fluency:comp3) collected after each trial or session. 
+
+# Exercise 3
+
+#### 3.1
+
+Import your data into R.  Check that you have the correct number of rows and columns, column names are in place, the encoding of characters looks OK, etc.   
+
+```{r}
+# This is pilot data for an intervention study. The pilot was cut short because of the coronavirus pandemic
+# and half the participants data was never submitted by the school. The plan is to simulate data in order to 
+# test analyses. We are currently collecting more data in order to be able to better simulate data.
+library(naniar)
+fokus_p <- readr::read_csv2("fokus_p_dbr_wide_2.csv")
+
+```
+
+
+#### 3.2
+
+Print the structure/glimpse/summary of the data. Outline briefly what kind of variables you have and if there are any missing or abnormal values. Make sure that each variable has the right class (numeric/character/factor etc).  
+
+```{r}
+glimpse(fokus_p)
+fokus_p <- fokus_p %>%
+  replace_with_na_all(condition = ~.x == 999)
+glimpse(fokus_p)
+```
+
+
+# Exercise 4
+
+Pick a few (2-5) variables of interest from your data (ideally, both categorical and numerical).  
+
+For **categorical variables**, count the observations in each category (or combination of categories). Are the frequencies balanced?  
+
+*For this data, the values of the categorical variables are completely made up (gender, group) and the sample size is two, so not much point in looking at frequencies. This is data from a failed pilot study. The planned sample was n=4 and T=72, but because of the coronavirus, the intervenion was cut short and data from 2 participants is not (easily) available. Two cohorts of new data will be collected, from n=10 participants this year and from n=x participants
+next year. x depends on power analyses conducted on the first cohorts data. Now I would like to simulate data based on the (failed) pilot study data. I am still learning how to do that, so I will be unable to properly do exercise 4 with this data.*
+
+```{r}
+
+```
+
+For **numerical variables**, compute some summary statistics (e.g. min, max, mean, median, SD) over the whole dataset or for subgroups. What can you say about the distributions of these variables, or possible group-wise differences?  
+
+*Again, with the current sample of 2 not much point in doing it right now. The age of participants is made up, but reflects the general age of participants in the intervention.*
+
+
+```{r}
+
+```
+
+
+# Exercise 5
+
+#### 5.1
+
+Describe if there's anything else you think should be done as "pre-processing" steps (e.g. recoding/grouping values, renaming variables, removing variables or mutating new ones, reshaping the data to long format, merging data frames together).
+
+
+```{r}
+# For this data, I would like to have it in long format:
+fokus_p_l <- fokus_p %>% gather(time, dbr, -id, -gender, -age, -group)
+glimpse(fokus_p_l)
+
+# 
+```
+#### 5.2
+
+Do you have an idea of what kind of relationships in your data you would like to visualise and for which variables? For example, would you like to depict variable distributions, the structure of multilevel data, summary statistics (e.g. means), or include model fits or predictions?
+
+*The data will consist of 3 measurement variables (only 1 included here), measured 72 times over 24 weeks. The final number of participants will hopefully be between 30 and 40. The data will be analysed both using single case analyses (eg. Tau-U) but also aggregate measures and single case meta analyses. Visualization of the data is also an important part. The individual data will have 3 phases: baseline (6 time points), intervention (60 time points), follow-up (6 time points). In addition, there will be a grouping variable for 2 variations of the intervention, but no placebo/business as usual control group. In this course, I would like to practice on simulated data how to visualize the individudal and group scores with focus on change/trend over time and comparisons between the three phases within individuals.*

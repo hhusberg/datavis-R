@@ -1,0 +1,149 @@
+---
+title: "Week 5 Exercises"
+output: html_notebook
+---
+
+Read the file timeuse_tidy.rds with `readRDS()`. The file contains the dataset that we tidied in the exercise session: records of daily time use from participants over multiple days. Note that since the data has been stored as rds (R-specific format), column types and factor levels are as we left them, and don't need to be re-corrected.
+
+```{r}
+library(cowplot)
+library(tidyverse)
+library(lubridate)
+time_d <- readRDS("timeuse_tidy.rds")
+
+```
+
+
+# Exercise 1
+
+#### 1.1
+
+Create a new variable that contains combined activity classes: "Work or school" (Work, Business, Education), "Free time" (Shopping, Social / Leisure, Home, Vacation), and "Other".  
+
+Calculate the mean time spent on each of the combined activity classes, grouped by **weekday, participant ID, and occ_full_time**.  
+
+```{r}
+time_d <- time_d %>%
+  mutate(activity3 = case_when(activity_class %in% c("Work", "Business", "Education") ~ 1, activity_class %in% c("Shopping", "Social / Leisure", "Home", "Vacation") ~ 2, TRUE ~ 3)) %>%
+  mutate(activity3 = factor(activity3))
+str(time_d)
+levels(time_d$activity3) <- c("Work or school", "Free time", "Other")
+levels(time_d$activity3)
+
+time_d_agg <- time_d %>%
+  group_by(weekday, indivID, occ_full_time, activity3) %>%
+  summarise(time_spent = mean(time_spent),
+            n = n()) %>%
+  ungroup()
+time_d_agg
+  
+```
+
+#### 1.2 
+
+Visualise the means you calculated.
+
+```{r}
+time_d_agg %>%
+  ggplot(aes(weekday, time_spent, color = activity3)) +
+  geom_col() + 
+  facet_wrap(~occ_full_time)
+
+```
+
+
+# Exercise 2
+
+#### 2.1
+
+What is computed in the code chunk below - what do the numbers tell you?  
+
+Can you think of another way to calculate the same thing?  
+
+```{r}
+
+dist_date <- tidytime %>%
+  distinct(indivID, date) %>%
+  arrange(date) %>%
+  count(date)
+
+# Calculates the number of individuals for which there are observations on the dates. So for 2016-10-14 there are 6 observations from 6 individuals.
+
+```
+
+#### 2.2
+
+Plot the numbers from above (use points, lines, or whatever you think is suitable).  
+
+```{r}
+dist_date <- tidytime %>%
+  distinct(indivID, date) %>%
+  arrange(date) %>%
+  count(date)
+
+dist_date %>%
+  ggplot(aes(date, n)) + 
+  geom_line() +
+  scale_x_date(date_breaks = "1 week", date_labels = "%W", date_minor_breaks = "1 day")
+
+```
+
+
+# Exercise 3
+
+#### 3.1
+
+Count the **total number of participants** in the data.  
+
+```{r}
+tidytime %>%
+  distinct(indivID) %>%
+  count()
+```
+
+#### 3.2
+
+For each participant, count the **number of separate days** that they recorded their time use on.  
+
+```{r}
+tidytime %>%
+  group_by(indivID) %>%
+  distinct(date) %>%
+  count()
+```
+
+
+# Exercise 4
+
+Explain step by step what happens in the code chunk below, and what the final figure represents.
+
+```{r fig.height=20, fig.width=10}
+tidytime %>% # Pipe the data to:
+  group_by(indivID) %>% # Group by individual participant
+  mutate(start_date = min(date)) %>% # Create new variable, start_date, by the smallest recorded value of date
+  ungroup %>% # Remove grouping
+  mutate(indivID = factor(indivID), 
+         # make id variable a factor
+         indivID = fct_reorder(indivID, start_date) %>%
+           # Reorder participants according to start_date
+           fct_rev()) %>% # Reverse order (why?)
+  ggplot(aes(date, indivID, colour = month(start_date, label = T))) + 
+  # Plot with date on x-axis, indivID on y-axis
+  geom_line() + 
+  # Plot lines
+  geom_point(size=.5, alpha=.1) +
+  # Plot points, larger than lines
+  theme_bw() + 
+  # Set theme
+  scale_y_discrete(breaks = "none") +
+  # Remove id's from y-axis I think
+  labs(x = "Date", y = "", colour = "Starting month")
+# Set label for x-axis to Date, none for y-axis, headline color-info with Starting month
+# The final figure lines represents the time-span of observations for each participant, so we see when they started and finished. The points also illustrate missing data.
+
+```
+
+
+
+
+
