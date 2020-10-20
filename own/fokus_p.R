@@ -4,7 +4,7 @@ library(tidyverse)
 library(data.table)
 library(ggplot2)
 getwd()
-setwd("C:/Users/hehusb/Documents/GitHub/datavis-R/own")
+
 fokus_p <- readr::read_csv2("fokus_p_dbr_wide.csv")
 fokus_p <- fokus_p %>%
   mutate(ae0 = na_if(ae0, 999)) %>%
