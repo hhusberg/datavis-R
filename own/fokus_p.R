@@ -23,7 +23,7 @@ fokus_p %>%
   ggplot(aes(x = ))
 
 library(tidyr)
-fokus_p_l <- fokus_p %>% gather(time, dbr, -c(id))
+fokus_p_l <- fokus_p %>% gather(time, dbr, -c(id, gender, age, group))
 
 glimpse(fokus_p_l)
 
@@ -33,3 +33,17 @@ fokus_p_l <- fokus_p_l %>%
 
 fokus_p_l %>%
   ggplot(aes(x=time, y=dbr, group = id, color = id)) + geom_line()
+
+summary(fokus_p_l)
+
+# simulating data
+
+  set.seed(1)
+  df_fuck <- data.frame(id = rep(1:10, each = 72) %>% as.character,
+                     time_p = rep(1:72, 10),
+                     group = rep(1:2, each = 360),
+                     age = rnorm(720, mean = 9, sd = 1),
+                     gender = rep(1:2, 360),
+                     dbr_ae = (sample.int(10, 720, replace = T) - 1)) %>%
+    mutate(group = factor(group))
+  

@@ -1,0 +1,94 @@
+---
+title: "Final exercise"
+author: "Henrik Husberg"
+date: "10/26/2020"
+output: 
+  html_document:
+  toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(data.table)
+library(ggplot2)
+```
+
+# Longitudinal study - description
+
+This is pilot data for an intervention study. The pilot was cut short because of the coronavirus pandemic
+and half the participants data was never submitted by the school. The plan is to simulate data in order to 
+test analyses. We are currently collecting more data in order to be able to better simulate data. In this fist part, I'll read, wrangle and present the (very) limited data we currently have.
+
+```{r}
+getwd()
+setwd("C:/Users/henri/Documents/GitHub/datavis-R/own")
+fokus_p <- readr::read_csv2("fokus_p_dbr_wide_2.csv")
+
+
+
+# Then have a look at the data
+str(fokus_p)
+glimpse(fokus_p)
+
+#I'll want the data in long format for plotting of individual trajectories
+library(tidyr)
+fokus_p_l <- fokus_p %>% gather(time, dbr, -c(id, gender, age, group))
+
+glimpse(fokus_p_l)
+
+# Then, I'll replace the 999:s with NA:s and change id and gender to factors
+
+fokus_p_l <- fokus_p_l %>%
+  mutate(dbr = na_if(dbr, 999)) %>%
+  mutate(id = as.factor(id)) %>%
+  mutate(gender = as.factor(gender))
+
+glimpse(fokus_p_l)
+
+```
+
+So the DV here is dbr (actually, there will be 3 dbr-measurements: dbr_ae, dbr_rb and dbr_db). DBR stands for Direct behavior rating, and is an observational measure of three behaviors in the classroom: Academic Engagement, Respectful Behavior and Disruptive Behavior. The scale is 0-10. Observations wil be conducted 3 times/week on all scales, for a total of 24 weeks. We expect some missing data, hopefully under 5%, but might be as high as 15%, especially with children staying home more during the coronavirus pandemic.
+
+# Example of plot
+
+I want to plot this data - it's easy now with the small dataframe, but once we get 72 measurements of (hopfully) 30-40 subjects it will get more complicated
+
+```{r}
+fokus_p_l %>%
+  ggplot(aes(x=time, y=dbr, group = id, color = id)) + geom_line()
+```
+# Simulating data
+
+In order to practice visualization, and maybe even conduct power analysis, I'll be simulating data. There is still much I (most) I don't understand about simulating data, so in order to get started I've simply tried to create a dataframe of the size we're hoping to collect, with (random) values according to the measurement intervals.
+
+```{r}
+# simulating data
+
+set.seed(1)
+fpl_sim <- data.frame(id = rep(1:10, each = 72) %>% as.character,
+                     time_p = rep(1:72, 10),
+                     group = rep(1:2, each = 360),
+                     age = rnorm(720, mean = 9, sd = 1),
+                     gender = rep(1:2, 360),
+                     dbr_ae = (sample.int(10, 720, replace = T) - 1)) %>%
+    mutate(group = factor(group))
+
+summary(fpl_sim)  
+
+# introducing some missing data
+
+# as.data.frame(lapply(fpl_sim, function(cc) cc[ sample(c(TRUE, NA), prob = c(0.85, 0.15), size = length(cc), replace = TRUE) ]))
+# Can't get it to work for just one column, applies NA:s to all data...
+
+```
+What I would like to do, is introduce trends to the **dbr_ae** variable. What this trend looks like will become clearer during this year when we hopefully will be able to collect n=10 over the 72 measurements. Until then, I can only assume. I would like to introduce different trends to different timepoints (baseline phase (time_p 1:6), intervention phase (time_p 7:14), intensified phase (time_p 15:66) and follow-up phase (time_p 67:72)).
+
+# Plotting individual trajectories
+
+This, I will have to work on a lot still. For now, I'll just demonstrate what a basic plot for 10 individuals would look like with completely random DV-values.
+
+```{r}
+fpl_sim %>%
+  ggplot(aes(x=time_p, y=dbr_ae, group = id, color = id)) + geom_line()
+```

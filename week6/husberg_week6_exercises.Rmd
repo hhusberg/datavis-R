@@ -1,6 +1,6 @@
 ---
 title: "Week 6 Exercises"
-output: html_notebook
+output: html_document
 ---
 
 # Exercise 1
@@ -51,7 +51,9 @@ Using the merged data frame, create the **composite variables F_total and W_tota
 ```{r}
 
 df_fw <- df_fw %>%
-  mutate(F_total = sum(c_across(F1:F3)))
+  mutate(F_total = rowSums(.[4:6])) %>%
+  mutate(W_total = rowSums(.[7:9]))
+
 ```
 
 
@@ -63,6 +65,16 @@ Visualise the distributions of F_total and W_total for the two groups and measur
 
 ```{r}
 
+df_fw %>%
+  ggplot(aes(F_total)) +
+  geom_boxplot() +
+  facet_wrap(group~session)
+
+df_fw %>%
+  ggplot(aes(W_total)) +
+  geom_boxplot() +
+  facet_wrap(group~session)
+
 ```
 
 #### 2.2
@@ -70,6 +82,10 @@ Visualise the distributions of F_total and W_total for the two groups and measur
 Fit a linear regression model with F_total as the DV, and session and group as predictors.  
 
 ```{r}
+str(df_fw)
+F.model <- lm(F_total ~ group + session, data = df_fw)
+
+summary(F.model)
 
 ```
 
@@ -78,6 +94,21 @@ Fit a linear regression model with F_total as the DV, and session and group as p
 Look at the means of F_total by group and session. How are they linked to the linear regression model coefficients?
 
 ```{r}
+df_fw <- df_fw %>%
+  group_by(group, session) %>%
+  mutate(F_mean = mean(F_total)) %>%
+  ungroup()
+
+df_fw %>%
+  ggplot(aes(session, F_mean, color = group)) +
+  geom_point()
+
+# The mean of F_total goes down between sessions for one group, and up for the other. So it seems there is an interaction effect. We can see if it's significant by adding it to the regression model.
+
+F.model.2 <- lm(F_total ~ group + session + group * session, data = df_fw)
+
+summary(F.model.2)
+
 
 ```
 
@@ -87,6 +118,40 @@ Look at the means of F_total by group and session. How are they linked to the li
 Visualise the [anscombe dataset](https://rdrr.io/r/datasets/anscombe.html) using ggplot2.
 
 ```{r}
+summary(anscombe)
+
+x1y1 <- lm(data = anscombe, y1 ~ x1)
+
+x1y1
+
+ggplot(data = anscombe, aes(x1, y1)) +
+  stat_summary(fun.data=mean_cl_normal) + 
+  geom_smooth(method='lm', formula= y~x)
+
+x2y2 <- lm(data = anscombe, y2 ~ x2)
+
+x2y2
+
+ggplot(data = anscombe, aes(x2, y2)) +
+  stat_summary(fun.data=mean_cl_normal) + 
+  geom_smooth(method='lm', formula= y~x)
+
+x3y3 <- lm(data = anscombe, y3 ~ x3)
+
+x3y3
+
+ggplot(data = anscombe, aes(x3, y3)) +
+  stat_summary(fun.data=mean_cl_normal) + 
+  geom_smooth(method='lm', formula= y~x)
+
+x4y4 <- lm(data = anscombe, y4 ~ x4)
+
+x4y4
+
+ggplot(data = anscombe, aes(x4, y4)) +
+  stat_summary(fun.data=mean_cl_normal) + 
+  geom_smooth(method='lm', formula= y~x)
+
 
 ```
 
