@@ -1,0 +1,265 @@
+---
+title: "Review & multilevel plotting"
+output: html_notebook
+---
+
+```{r setup, include=F}
+library(broom) # tidy models
+library(broom.mixed) # broom for LMMs
+library(lme4) # fitting LMMs
+library(lmerTest) # e.g. computing p-values for LMMs
+library(tidyverse)
+```
+
+# Data wrangling overview
+
+See also the **RStudio cheat sheet PDFs in Moodle**!
+
+### Read the data  
+Use readr functions, `data.table::fread()`, or dedicated libraries (e.g. foreign for SPSS)  
+Check the structure and dimensions of your data  
+- Do you have the right number of rows and columns?  
+- Are variable names and data values encoded correctly?  
+- Use e.g. `glimpse()`, `head()`, `str()`
+
+### Tidy the data
+Check variable classes and transform them if needed  
+See a summary of the data; are value ranges sensible?  
+Plot your data to see distributions, spot outliers, etc.  
+
+#### Recoding values
+**Recoding missing values**: use `na_if()` to recode specific values to NA (opposite function: `replace_na()`)  
+**"Renaming values"** (i.e. one-to-one mapping): use `recode()` or `recode_factor()`  
+- recode will preserve original factor levels while changing the labels; recode_factor will create new factor levels from new values  
+**Recoding based on condition**: for dichotomous output variable, use `if_else()`. In more complex cases, use `case_when()`  
+- with these functions, you can recode values based on conditions in another variable  
+**Cutting a continuous variable into bins**: use `cut_width()`, `cut_number()`, or `cut_interval()`  
+
+#### Long and wide data
+Use `gather()` and `spread()`, or `pivot_longer()` and `pivot_wider()` to transform between wide and long data frames  
+
+#### Other data wrangling functions
+
+**Filtering**: use `filter()` to subset the data by condition; `drop_na()` drops rows with missing values  
+**Selecting variables**: use `select()` to pick variables by name or condition (e.g. is_numeric)   
+**Reordering rows and columns**: use `arrange()` to sort rows by a variable, and `relocate()` to change column order  
+**Reordering factor levels**: use `fct_reorder()` to reorder based on another variable, and `fct_rev()` to reverse the order   
+**Manipulating strings**: use stringr functions (see String manipulation PDF in Moodle)  
+
+### Combining data frames
+**Concatenating data**: use `cbind()`, `rbind()`, `bind_cols()` or `bind_rows()`  
+**Merging data**: use *join functions* - `full_join()`, `left_join()`, etc. to match by value  
+- remember to specify matching variables!  
+
+### Creating new variables or summaries
+**Row means or sums**: use `rowwise()` to group the data by row, and then mutate  
+**Calculating aggregates**: use `summarise()` to aggregate values and reduce the number of rows; replace it with `mutate()` if you just wish to add the results to the existing data frame  
+- `group_by()` the sub-group(s) you want to use. **Remember to ungroup!**  
+- other useful functions: `count()`, `add_count()`, `distinct()`, `n_distinct()`, `n()`  
+**Mutate/summarise multiple variables at once**: use `across()` to pick variables by name or condition (e.g. is_numeric)  
+- note: across is replacing mutate_all, mutate_at, mutate_if functions
+
+### Plot
+Map variables to aesthetics  
+Select your geom(s)  
+**Use grouping variables** to set colour, shape, linetype, or facets: data should be in long format, i.e. all values of the grouping variable in one column  
+**Adjusting scales:** use `scale_x_continuous()`, `scale_x_discrete()`, etc. to modify axis breaks, labels, and limits  
+**Modify labels** with `labs()`  
+**Modify colours** manually or with color palettes  
+**Use themes** to modify the appearance of your plots  
+- tweak components of a theme to make minor changes  
+
+
+
+# Visualising multilevel models: a simple example
+
+This simulated data has observations of study hours per week and exam grades in 5 schools (A-E). We're interested in what kind of a relationship there is between study hours and grades (presumably a positive one).
+
+```{r}
+set.seed(1)
+df <- data.frame(school = c(rep(1:3, 22), rep(4:5, 17))) %>% 
+  mutate(study_hours = rnorm(100, 15, 2) - school) %>%
+  group_by(school) %>%
+  mutate(grade = study_hours*rnorm(n(),0.7*school*1.7,.3)) %>%
+  ungroup %>%
+  mutate(school = factor(school, labels = c("A", "B", "C", "D", "E"))) 
+
+
+```
+
+```{r}
+summary(df)
+```
+
+
+Let's first plot the data without groups. The association between study hours and grades seems to be negative.
+
+```{r}
+df %>%
+  ggplot(aes(study_hours, grade)) + geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "Study hours per week", y = "Grade") +
+  theme_bw()
+
+```
+
+When we add colours for different schools, we can see the situation more clearly: the relationship between study hours and grades is in fact positive in all schools, but it disappears if we dismiss the school variable. This is an example of **Simpson's paradox**.  
+
+We can see that there are differences between schools in 1. distribution of study hours (to some extent), 2. distribution of grades, and 3. strength of the study hours - grades relationship.
+
+```{r}
+df %>%
+  ggplot(aes(study_hours, grade, colour = school)) + geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "Study hours per week", y = "Grade") +
+  theme_bw()
+
+```
+
+```{r}
+df %>%
+  gather(var, value, -school) %>%
+  ggplot(aes(value, fill = school)) + geom_density(alpha = .5) +
+  facet_wrap(~var, scales = "free") +
+  theme_bw() +
+  labs(x = "", y = "", title = "Distribution of study hours and grades by school")
+
+```
+
+
+Let's fit a **linear mixed model** (LMM) with the `lmer()` function from the lme4 package. (Note: the lmerTest package should be loaded to e.g. compute p-values for the model.)      
+
+In LMMs, you can specify *random effects* - in this case, the school variable. The schools in our data are a random sample from a population of schools, and we want to account for the  We will not go deeper into LMM theory here, but essentially there are two types of random effects: random intercept and random slope. Both of these are illustrated below.  
+
+
+Random intercept only
+
+```{r}
+lmm_ic_fit <- lmer(grade ~ study_hours + (1|school), data = df)
+
+summary(lmm_ic_fit)
+
+```
+
+Then we can plot the model, using the `augment()` function from the broom.mixed package to get tidy data.  
+
+```{r}
+# define plotting function 
+plot_model <- function(model) {
+  augment(model) %>%
+  ggplot(aes(colour = school)) +
+  geom_point(aes(study_hours, grade), alpha = .7) +
+  geom_line(aes(study_hours, .fitted), size = 1) +
+  labs(x = "Study hours per week", y = "Grade") +
+  theme_bw()
+}
+```
+
+
+
+```{r fig.width=10}
+
+plot_model(lmm_ic_fit) + labs(title = "LMM with random intercept only")
+
+```
+
+Then a model with both random intercept and slope.
+
+```{r}
+lmm_fit <- lmer(grade ~ study_hours + (study_hours|school), data = df)
+
+summary(lmm_fit)
+```
+
+```{r fig.width=10}
+
+plot_model(lmm_fit) + labs(title = "LMM with random intercept and slope")
+
+```
+
+Let's plot both of the model fits in one plot:
+
+```{r fig.width=10}
+
+augment(lmm_fit) %>%
+  full_join(augment(lmm_ic_fit), by = c("grade", "study_hours", "school"), suffix = c("_lmm", "_lmm_ic")) %>%
+  select(grade:.fitted_lmm, .fitted_lmm_ic) %>%
+  gather(model, predicted_value, .fitted_lmm, .fitted_lmm_ic) %>%
+  mutate(model = if_else(model == ".fitted_lmm", "Intercept and slope", "Intercept only")) %>%
+  ggplot(aes(colour = school)) +
+  geom_point(aes(study_hours, grade), alpha = .4) +
+  geom_line(aes(study_hours, predicted_value, linetype = model), size = 1) +
+  labs(x = "Study hours per week", y = "Grade", colour = "School", linetype = "Random effects",
+       title = "Comparison of LMM predictions with different random effects") +
+  theme_bw() +
+  guides(color = guide_legend(override.aes = list(linetype = NULL, alpha = 1))) # override aesthetics to 1. remove line from School legend and 2. remove transparency from legend points
+
+```
+
+We can use `tidy()` to extract the random effects (intercept and slope) for schools from the model.  
+
+Note: Some of the random slopes are negative (i.e. for schools A, B and C). This doesn't mean that the actual *slopes* for these schools would be negative! Just that the random effects of belonging to one of these schools "works against" the fixed (positive) effect of study_hours; the slope for schools A and B is less steep, but still positive.
+
+```{r}
+
+tidy(lmm_fit, effects="ran_vals") %>%
+  ggplot(aes(fct_rev(level), estimate))+
+  geom_pointrange(aes(ymin = estimate - 1.96*std.error,
+                        ymax = estimate + 1.96*std.error)) +
+  facet_wrap(~term) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") +
+  coord_flip() +
+  theme_bw() +
+  labs(x = "School", title = "Random effects of LMM")
+
+
+
+```
+
+Note that LMMs can be used to generate predictions based on new data with different levels of the random effects variable (only the fixed effect will be used). This is done by defining `allow.new.levels = T` in the `predict()` function call.
+
+----------
+See a very good tutorial on wrangling with multilevel data [here](https://www.monicathieu.com/posts/2020-04-08-tidy-multilevel/) (e.g. nesting data to fit and store multiple linear models, which hasn't been covered on this course).  
+
+----------
+
+# Extension libraries to ggplot2
+
+There are lots of libraries built on ggplot2 that can be used to e.g. animate your plots (gganimate), make them interactive (plotly, ggiraph), or display specific types of plots (ggridges for ridgeline plots, ggdendro for cluster analysis, ggeffects for computing marginal effects for plotting). Some of them are listed [here](https://exts.ggplot2.tidyverse.org/). 
+
+
+```{r}
+library(ggridges)
+```
+
+```{r}
+
+df %>%
+  gather(var, value, -school) %>%
+  mutate(var = str_replace(var, "_", " ") %>% str_to_sentence()) %>%
+  ggplot(aes(value, fct_rev(school), fill = var)) + # x = continuous, y = categorical
+  geom_density_ridges(alpha = .8) +
+  facet_wrap(~var, scales = "free", strip.position = "bottom") +
+  labs(x = "", y = "School") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+Interactive plot with plotly:
+
+```{r fig.width=10, fig.height=7}
+library(plotly)
+
+p <- df %>%
+  ggplot() +
+  geom_point(aes(study_hours, grade, colour = school), alpha = .4) +
+  labs(x = "Study hours per week", y = "Grade", colour = "School") +
+  theme_bw() 
+
+ggplotly(p)
+
+```
+
+
+

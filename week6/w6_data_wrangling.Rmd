@@ -120,6 +120,7 @@ Data frames can also be split according to a variable. The result will be a **li
 ```{r}
 sbj_dataframes <- split(sbj_scores, sbj_scores$participant)
 
+
 sbj_dataframes
 
 str(sbj_dataframes)
